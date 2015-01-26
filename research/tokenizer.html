@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lexer</title>
+    <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
+    <script type="application/javascript;version=1.8">
+    function tokenize() {
+      let regExpField = document.getElementById("regexp");
+      let regExp = regExpField.value;
+      let tokenizer = new RegExpTokenizer();
+      let tokenizedRegExp = tokenizer.tokenize(regExp);
+      console.log(tokenizedRegExp);
+    }
+
+    window.addEventListener("DOMContentLoaded", function onLoad() {
+      let regExpField = document.getElementById("regexp");
+
+      regExpField.addEventListener("keydown", function onRegExpFieldKeyDown(evt) {
+        if (evt.keyCode === KeyEvent.DOM_VK_RETURN)
+          tokenize();
+      });
+
+      let tokenizeButton = document.getElementById("tokenize");
+      tokenizeButton.addEventListener("click", tokenize);
+    });
+    </script>
+  </head>
+  <body>
+    <input id="regexp" type="text" value="abc"/>
+    <button id="tokenize">Tokenize</button>
+  </body>
+</html>
