@@ -4,29 +4,29 @@
   let RegExpTokenizer = function() {};
 
   RegExpTokenizer.ESCAPE_CHAR_TYPES = [
-    "IdentityEscape",
     "ControlEscape",
-    "ControlLetterEscape",
+    "ControlLetter",
+    "HexEscapeSequence",
+    "UnicodeEscapeSequence",
+    "IdentityEscape",
     "CharacterClassEscape"
   ];
 
   RegExpTokenizer.ESCAPE_CHARS = {
-    "a": 0,
-    "0": 1,
-    "t": 1,
-    "n": 1,
-    "v": 1,
-    "f": 1,
-    "r": 1,
-    "c": 2,
-    "w": 3,
-    "W": 3,
-    "d": 3,
-    "D": 3,
-    "s": 3,
-    "S": 3,
-    "b": 3,
-    "B": 3
+    "f": 0,
+    "n": 0,
+    "r": 0,
+    "t": 0,
+    "v": 0,
+    "c": 1,
+    "x": 2,
+    "u": 3,
+    "d": 5,
+    "D": 5,
+    "s": 5,
+    "S": 5,
+    "w": 5,
+    "W": 5
   };
 
   RegExpTokenizer.prototype.tokenize = function(str) {
@@ -54,7 +54,13 @@
     while (i < length) {
       let char = str[i];
 
-      if (char === "(" && !charClass) {
+      if (char === "\\") {
+        if (currentToken)
+          parent.body.push(currentToken);
+  
+        currentToken = new token("", i, i + 1);
+        this.parseEscapeSequence(str, i, currentToken);
+      } else if (char === "(" && !charClass) {
         if (currentToken)
           parent.body.push(currentToken);
         currentToken = new token("", i, i + 1, {body: []});
@@ -96,8 +102,6 @@
           quantifierToken.error = "nothingToRepeat";
         this.parseQuantifier(str, quantifierToken);
         currentToken = quantifierToken;
-      } else if (char === "\\") {
-        this.parseEscapeSequence(str, i, currentToken);
       } else if (char === "." && !charClass) {
         if (currentToken && currentToken.type !== "CapturingGroup")
           parent.body.push(currentToken);
@@ -200,11 +204,33 @@
     }
   };
 
-  RegExpTokenizer.prototype.parseEscapeSequence = function(str, i, block) {
-    block.type = RegExpTokenizer.ESCAPE_CHAR_TYPES[RegExpTokenizer.ESCAPE_CHARS[str[i + 1]]],
-    block.loc = {
-      start: i,
-      end: i + 1
+  RegExpTokenizer.prototype.parseEscapeSequence = function(str, i, token) {
+    let escapeCharType = RegExpTokenizer.ESCAPE_CHARS[str[i + 1]];
+    if (escapeCharType === undefined)
+      escapeCharType = 4;
+    token.type = RegExpTokenizer.ESCAPE_CHAR_TYPES[escapeCharType];
+    switch (token.type) {
+      case "ControlEscape":
+      case "IdentityEscape":
+      case "CharacterClassEscape":
+        token.char = str[i + 1];
+        token.loc.end++;
+        break;
+
+      case "ControlLetterEscape":
+        token.char = str[i + 2];
+        token.loc.end += 2;
+        break;
+
+      case "HexEscapeSequence":
+        token.sequence = str.substr(i + 2, 2);
+        token.loc.end += 3;
+        break;
+
+      case "UnicodeEscapeSequence":
+        token.sequence = str.substr(i + 2, 4);
+        token.loc.end += 5;
+        break;
     }
 
     return;
