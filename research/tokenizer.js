@@ -47,7 +47,7 @@
     let i = 0;
     let length = str.length;
     let currentToken = null;
-    let capGroups = [];
+    let stack = [];
     let charClass = null;
     let root = new token("RegularExpression", 0, str.length, {body: []});
     let parent = root;
@@ -68,14 +68,14 @@
 
         this.parseGroup(str, currentToken);
         if (currentToken.type === "CapturingGroup")
-          capGroups.push(currentToken);
-        //console.log(capGroups);
+          stack.push(currentToken);
+        //console.log(stack);
       } else if (char === ")" && !charClass) {
-        if (capGroups.length > 0) {
-          let capGroup = capGroups.pop();
+        if (stack.length > 0) {
+          let capGroup = stack.pop();
           parent.body.push(currentToken);
           currentToken = capGroup;
-          parent = capGroups.length > 0 ? capGroups[capGroups.length - 1] : root;
+          parent = stack.length > 0 ? stack[stack.length - 1] : root;
         } else {
           currentToken.error = "additionalClosingGroup";
         }
@@ -86,10 +86,12 @@
         charClass = new token("CharacterClass", i, i + 1, {body: []});
         currentToken = charClass;
         parent = currentToken;
+        stack.push(currentToken);
       } else if (char === "]" && charClass) {
         if (currentToken && currentToken.type !== "Range")
           parent.body.push(currentToken);
-        parent = root;
+        stack.pop();
+        parent = stack.length > 0 ? stack[stack.length - 1] : root;
         currentToken = charClass;
         charClass = null;
         currentToken.loc.end = i + 1;
@@ -137,7 +139,7 @@
     }
   
     parent.body.push(currentToken);
-    if (capGroups.length !== 0)
+    if (stack.length !== 0)
       parent.error = "missingClosingGroup";
 
     return root;
