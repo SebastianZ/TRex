@@ -325,7 +325,7 @@ a{5}b{3,4}?c{,2}d{2,}
       loc:
       {
         start: 1,
-        end: 3
+        end: 4
       }
     },
     {
@@ -345,7 +345,7 @@ a{5}b{3,4}?c{,2}d{2,}
       loc:
       {
         start: 5,
-        end: 10
+        end: 11
       }
     },
     {
@@ -353,8 +353,8 @@ a{5}b{3,4}?c{,2}d{2,}
       value: "c",
       loc:
       {
-        start: 10,
-        end: 11
+        start: 11,
+        end: 12
       }
     },
     {
@@ -364,8 +364,8 @@ a{5}b{3,4}?c{,2}d{2,}
       lazy: false,
       loc:
       {
-        start: 11,
-        end: 15
+        start: 12,
+        end: 16
       }
     },
     {
@@ -373,8 +373,8 @@ a{5}b{3,4}?c{,2}d{2,}
       value: "d",
       loc:
       {
-        start: 15,
-        end: 16
+        start: 16,
+        end: 17
       }
     },
     {
@@ -384,15 +384,15 @@ a{5}b{3,4}?c{,2}d{2,}
       lazy: false,
       loc:
       {
-        start: 16,
-        end: 20
+        start: 17,
+        end: 21
       }
     }
   ],
   loc:
   {
     start: 0,
-    end: 20
+    end: 21
   }
 }
 
