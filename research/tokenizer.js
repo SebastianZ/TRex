@@ -59,7 +59,7 @@
       let char = str[i];
 
       if (char === "\\") {
-        if (currentToken)
+        if (currentToken && currentToken !== parent)
           parent.body.push(currentToken);
   
         currentToken = new token("", i, i + 1);
