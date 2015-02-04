@@ -74,7 +74,6 @@
         if (currentToken.type === "CapturingGroup")
           this.capturingGroups.push(currentToken);
         stack.push(currentToken);
-        //console.log(stack);
       } else if (char === ")" && !charClass) {
         if (stack.length > 0) {
           let capGroup = stack.pop();
@@ -120,7 +119,7 @@
       } else if (char === "-" && charClass) {
         currentToken = new token("Range", currentToken.loc.start, i + 1, {left: currentToken});
       } else {
-        if (!currentToken || currentToken.type !== "Literal") {
+        if (!currentToken || currentToken.type !== "Literal" || charClass) {
           if (currentToken && currentToken.type !== "CapturingGroup" &&
               currentToken.type !== "CharacterClass" && !currentToken.right) {
             parent.body.push(currentToken);
