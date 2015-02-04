@@ -1,7 +1,8 @@
 (function () {
   "use strict";
 
-  let RegExpTokenizer = function() {};
+  let RegExpTokenizer = function() { };
+  let prototype = RegExpTokenizer.prototype;
 
   RegExpTokenizer.ESCAPE_CHAR_TYPES = [
     "ControlEscape",
@@ -29,7 +30,9 @@
     "W": 5
   };
 
-  RegExpTokenizer.prototype.tokenize = function(str) {
+  prototype.capturingGroups = [];
+
+  prototype.tokenize = function(str) {
     function token(type, start, end, additionalProps) {
       this.type = type;
       if (additionalProps) {
@@ -68,7 +71,8 @@
 
         this.parseGroup(str, currentToken);
         if (currentToken.type === "CapturingGroup")
-          stack.push(currentToken);
+          this.capturingGroups.push(currentToken);
+        stack.push(currentToken);
         //console.log(stack);
       } else if (char === ")" && !charClass) {
         if (stack.length > 0) {
@@ -145,7 +149,7 @@
     return root;
   };
 
-  RegExpTokenizer.prototype.parseGroup = function(str, token) {
+  prototype.parseGroup = function(str, token) {
     let match = str.substr(token.loc.start, 3).match(/\?(?::|<?[!=])/);
     if (match) {
       token.type = match.contains("=") ? "Positive" : "Negative";
@@ -158,7 +162,7 @@
     }
   };
 
-  RegExpTokenizer.prototype.parseQuantifier = function(str, token) {
+  prototype.parseQuantifier = function(str, token) {
     switch (str[token.loc.start]) {
       case "?":
         token.type = "OptionalQuantifier";
@@ -206,7 +210,7 @@
     }
   };
 
-  RegExpTokenizer.prototype.parseEscapeSequence = function(str, i, token) {
+  prototype.parseEscapeSequence = function(str, i, token) {
     let escapeCharType = RegExpTokenizer.ESCAPE_CHARS[str[i + 1]];
     if (escapeCharType === undefined)
       escapeCharType = 4;
