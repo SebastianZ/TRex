@@ -446,17 +446,8 @@ a{5}b{3,4}?c{,2}d{2,}
   body:
   [
     {
-      type: "ControlLetter",
-      char:
-      {
-        type: "Literal",
-        value: "a",
-        loc:
-        {
-          start: 1,
-          end: 2
-        }
-      },
+      type: "IdentityEscape",
+      char: "a",
       loc:
       {
         start: 0,
@@ -465,16 +456,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlEscape",
-      char:
-      {
-        type: "Literal",
-        value: "t",
-        loc:
-        {
-          start: 3,
-          end: 4
-        }
-      },
+      char: "t",
       value: 9,
       loc:
       {
@@ -484,16 +466,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlEscape",
-      char:
-      {
-        type: "Literal",
-        value: "n",
-        loc:
-        {
-          start: 5,
-          end: 6
-        }
-      },
+      char: "n",
       value: 10,
       loc:
       {
@@ -503,16 +476,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlEscape",
-      char:
-      {
-        type: "Literal",
-        value: "v",
-        loc:
-        {
-          start: 7,
-          end: 8
-        }
-      },
+      char: "v",
       value: 11,
       loc:
       {
@@ -522,16 +486,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlEscape",
-      char:
-      {
-        type: "Literal",
-        value: "f",
-        loc:
-        {
-          start: 9,
-          end: 10
-        }
-      },
+      char: "f",
       value: 12,
       loc:
       {
@@ -541,16 +496,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlEscape",
-      char:
-      {
-        type: "Literal",
-        value: "r",
-        loc:
-        {
-          start: 11,
-          end: 12
-        }
-      },
+      char: "r",
       value: 13,
       loc:
       {
@@ -560,16 +506,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "ControlLetterEscape",
-      char:
-      {
-        type: "Literal",
-        value: "J",
-        loc:
-        {
-          start: 14,
-          end: 15
-        }
-      },
+      char: "J",
       value: 10,
       loc:
       {
@@ -579,16 +516,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "d",
-        loc:
-        {
-          start: 16,
-          end: 17
-        }
-      },
+      char: "d",
       loc:
       {
         start: 15,
@@ -597,16 +525,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "D",
-        loc:
-        {
-          start: 18,
-          end: 19
-        }
-      },
+      char: "D",
       loc:
       {
         start: 17,
@@ -615,16 +534,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "s",
-        loc:
-        {
-          start: 20,
-          end: 21
-        }
-      },
+      char: "s",
       loc:
       {
         start: 19,
@@ -633,16 +543,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "S",
-        loc:
-        {
-          start: 22,
-          end: 23
-        }
-      },
+      char: "S",
       loc:
       {
         start: 21,
@@ -651,16 +552,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "w",
-        loc:
-        {
-          start: 24,
-          end: 25
-        }
-      },
+      char: "w",
       loc:
       {
         start: 23,
@@ -669,16 +561,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "CharacterClassEscape",
-      char:
-      {
-        type: "Literal",
-        value: "W",
-        loc:
-        {
-          start: 26,
-          end: 27
-        }
-      },
+      char: "W",
       loc:
       {
         start: 25,
