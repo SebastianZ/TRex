@@ -120,7 +120,7 @@
         currentToken = new token("Range", currentToken.loc.start, i + 1, {left: currentToken});
       } else {
         if (!currentToken || currentToken.type !== "Literal" || charClass) {
-          if (currentToken && currentToken.type !== "CapturingGroup" &&
+          if (currentToken && currentToken !== parent && currentToken.type !== "CapturingGroup" &&
               currentToken.type !== "CharacterClass" && !currentToken.right) {
             parent.body.push(currentToken);
           }
@@ -154,11 +154,13 @@
   prototype.parseGroup = function(str, token) {
     let match = str.substr(token.loc.start, 3).match(/\?(?::|<?[!=])/);
     if (match) {
-      token.type = match.contains("=") ? "Positive" : "Negative";
-      token.type += "Look" + (match.contains("<") ? "Behind" : "Ahead");
+      token.type = match[0].contains("=") ? "Positive" : "Negative";
+      token.type += "Look" + (match[0].contains("<") ? "Behind" : "Ahead");
 
-      if (match.contains("<"))
+      if (match[0].contains("<"))
         token.error = "lookbehind";
+
+      token.loc.end += match[0].length; 
     } else {
       token.type = "CapturingGroup";
     }
