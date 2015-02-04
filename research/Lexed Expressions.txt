@@ -578,6 +578,49 @@ a{5}b{3,4}?c{,2}d{2,}
 
 --------------------------------------------------
 
+\u00BD\x0D\cM
+
+{
+  type: "RegularExpression",
+  body:
+  [
+    {
+      type: "UnicodeEscapeSequence",
+      sequence: "00BD",
+      loc:
+      {
+        start: 0,
+        end: 6
+      }
+    },
+    {
+      type: "HexEscapeSequence",
+      sequence: "0D",
+      loc:
+      {
+        start: 6,
+        end: 10
+      }
+    },
+    {
+      type: "ControlLetterEscape",
+      char: "M",
+      loc:
+      {
+        start: 10,
+        end: 13
+      }
+    }
+  ],
+  loc:
+  {
+    start: 0,
+    end: 13
+  }
+}
+
+--------------------------------------------------
+
 a(?=b)
 
 {
@@ -618,49 +661,6 @@ a(?=b)
   {
     start: 0,
     end: 6
-  }
-}
-
---------------------------------------------------
-
-\u00BD\x0D\cM
-
-{
-  type: "RegularExpression",
-  body:
-  [
-    {
-      type: "UnicodeEscapeSequence",
-      sequence: "00BD",
-      loc:
-      {
-        start: 0,
-        end: 6
-      }
-    },
-    {
-      type: "HexEscapeSequence",
-      sequence: "0D",
-      loc:
-      {
-        start: 6,
-        end: 10
-      }
-    },
-    {
-      type: "ControlLetterEscape",
-      char: "M",
-      loc:
-      {
-        start: 10,
-        end: 13
-      }
-    }
-  ],
-  loc:
-  {
-    start: 0,
-    end: 13
   }
 }
 
