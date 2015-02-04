@@ -446,7 +446,7 @@ a{5}b{3,4}?c{,2}d{2,}
   body:
   [
     {
-      type: "IdentityEscape",
+      type: "ControlLetter",
       char:
       {
         type: "Literal",
