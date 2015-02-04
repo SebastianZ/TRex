@@ -6,7 +6,7 @@
 
   RegExpTokenizer.ESCAPE_CHAR_TYPES = [
     "ControlEscape",
-    "ControlLetter",
+    "ControlLetterEscape",
     "HexEscapeSequence",
     "UnicodeEscapeSequence",
     "IdentityEscape",
