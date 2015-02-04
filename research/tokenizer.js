@@ -30,6 +30,7 @@
     "W": 5
   };
 
+  prototype.token = null;
   prototype.capturingGroups = [];
 
   prototype.tokenize = function(str) {
@@ -145,6 +146,8 @@
     parent.body.push(currentToken);
     if (stack.length !== 0)
       parent.error = "missingClosingGroup";
+
+    this.token = root;
 
     return root;
   };
