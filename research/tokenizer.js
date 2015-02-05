@@ -130,8 +130,7 @@
           if (currentToken && currentToken.type === "Range" && !currentToken.right) {
             currentToken.right = literalToken;
             currentToken.loc.end = i + 1;
-          }
-          else
+          } else
             currentToken = literalToken;
         } else {
           currentToken.value += str[i];
@@ -142,9 +141,17 @@
       i = currentToken.loc.end;
     }
   
-    parent.body.push(currentToken);
-    if (stack.length !== 0)
-      parent.error = "missingClosingGroup";
+    if (stack.length > 0) {
+      parent.error = "missingClosingBracket";
+  
+      while (stack.length > 0) {
+        currentToken = stack.pop();
+        parent = stack.length > 0 ? stack[stack.length - 1] : root;
+        parent.body.push(currentToken);
+      }
+    } else
+      parent.body.push(currentToken);
+      
 
     this.token = root;
 
