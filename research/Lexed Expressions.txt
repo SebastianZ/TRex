@@ -356,7 +356,7 @@ a{5}b{3,4}?c{,2}d{2,}
     },
     {
       type: "FixedRepetitionQuantifier",
-      repetition: 5,
+      repetitions: 5,
       lazy: false,
       loc:
       {
@@ -641,6 +641,7 @@ a{5}b{3,4}?c{,2}d{2,}
     {
       type: "ControlLetterEscape",
       char: "M",
+      value: 10,
       loc:
       {
         start: 10,
