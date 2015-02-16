@@ -128,16 +128,30 @@
         } catch(e) {
           result = e;
         }
+        let stringifiedResult = JSON.stringify(result);
+        let testOK = (stringifiedResult === test.expected);
 
         let tr = document.createElement("tr");
+
         let tdName = document.createElement("td");
         tdName.textContent = test.name;
+
         let tdResult = document.createElement("td");
-        tdResult.textContent = (JSON.stringify(result) === test.expected ? "OK" : "FAILED");
+        tdResult.textContent = (testOK ? "OK" : "FAILED");
         if (result instanceof Error)
           tdResult.textContent += " (" + result + ")";
+
+        let tdDetails = document.createElement("td");
+        if (!testOK) {
+          tdDetails.innerHTML = '<strong>Expected:</strong><br/><code>' +
+              test.expected + '</code><br/><strong>Observed:</strong><br/><code>' +
+              stringifiedResult + '</code>';
+        }
+
         tr.appendChild(tdName);
         tr.appendChild(tdResult);
+        tr.appendChild(tdDetails);
+
         tbody.appendChild(tr);
       });
     }
