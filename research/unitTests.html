@@ -3,6 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <title>Unit tests for tokenizer</title>
+    <style type="text/css">
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+
+    th, td {
+      padding: 5px;
+    }
+
+    thead {
+      background-color: #dcdcdc;
+    }
+
+    tbody > tr:nth-child(even) {
+      background-color: #f0f0f0;
+    }
+
+    th:nth-child(2), td:nth-child(2) {
+      text-align: center;
+    }
+    </style>
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
     <script type="application/javascript;version=1.8">
     function runTests() {
@@ -167,6 +193,7 @@
         <tr>
           <th>Test</th>
           <th>Result</th>
+          <th>Details</th>
         </tr>
       </thead>
       <tbody>
