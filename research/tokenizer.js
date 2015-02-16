@@ -209,7 +209,7 @@
             token.max = repetitions[3] !== "" ? Number(repetitions[3]) : null;
           } else {
             token.type = "Fixed" + token.type;
-            token.repetitions = repetitions[1];
+            token.repetitions = Number(repetitions[1]);
           }
         } else
           token.error = "InvalidRepetitionQuantifier";
