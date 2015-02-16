@@ -30,6 +30,15 @@
     "W": 5
   };
 
+  RegExpTokenizer.ESCACPE_CHAR_CODES = {
+    "0" : 0,
+    "t" : 9,
+    "n" : 10,
+    "v" : 11,
+    "f" : 12,
+    "r" : 13
+  };
+
   prototype.token = null;
   prototype.capturingGroups = [];
 
@@ -231,11 +240,15 @@
       case "IdentityEscape":
       case "CharacterClassEscape":
         token.char = str[i + 1];
+        if (token.type == "ControlEscape") {
+          token.value = RegExpTokenizer.ESCACPE_CHAR_CODES[token.char];
+        }
         token.loc.end++;
         break;
 
       case "ControlLetterEscape":
         token.char = str[i + 2];
+        token.value = token.char.charCodeAt(0) - 64;
         token.loc.end += 2;
         break;
 
