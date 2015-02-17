@@ -71,6 +71,9 @@
         this.parseEscapeSequence(str, currentToken);
       } else if (char === ".") {
         currentToken = new token("AnyCharacter", i);
+      } else if ("?*+{".contains(char)) {
+        currentToken = new token("", i, null, {lazy: false});
+        this.parseQuantifier(str, currentToken);
       } else if (char === "^" || char === "$") {
         currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
       } else {
@@ -97,6 +100,54 @@
     this.token = ast;
 
     return ast;
+  };
+
+  prototype.parseQuantifier = function(str, token) {
+    switch (str[token.loc.start]) {
+      case "?":
+        token.type = "OptionalQuantifier";
+        break;
+
+      case "*":
+        token.type = "ZeroOrMoreQuantifier";
+        break;
+
+      case "+":
+        token.type = "OneOrMoreQuantifier";
+        break;
+
+      case "{":
+        token.type = "RepetitionQuantifier";
+        let i = token.loc.end;
+        while (str[i] && /[\d,]/.test(str[i])) {
+          i++;
+          token.loc.end = i;
+        }
+        if (i === str.length)
+          token.error = "RepetitionQuantifierNotClosed";
+        else if (str[i] !== "}")
+          token.error = "InvalidRepetitionQuantifier";
+        else
+          token.loc.end++;
+
+        let repetitions = str.substr(token.loc.start + 1, token.loc.end - 1).match(/^(\d*)(,(\d*))?\}/);
+        if (repetitions) {
+          if (repetitions[3] !== undefined) {
+            token.type = "Variable" + token.type;
+            token.min = repetitions[1] !== "" ? Number(repetitions[1]) : null;
+            token.max = repetitions[3] !== "" ? Number(repetitions[3]) : null;
+          } else {
+            token.type = "Fixed" + token.type;
+            token.repetitions = Number(repetitions[1]);
+          }
+        } else
+          token.error = "InvalidRepetitionQuantifier";
+    }
+
+    if (str[token.loc.end] === "?") {
+      token.lazy = true;
+      token.loc.end++;
+    }
   };
 
   prototype.parseEscapeSequence = function(str, token) {
