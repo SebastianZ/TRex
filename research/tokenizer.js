@@ -57,6 +57,9 @@
       }
     }
 
+    this.token = null;
+    this.capturingGroups = [];
+
     let length = str.length;
     let i = 0;
     let ast = new token("RegularExpression", i, length, {body: []});
