@@ -69,6 +69,8 @@
       if (char === "\\") {
         currentToken = new token("", i);
         this.parseEscapeSequence(str, currentToken);
+      } else if (char === ".") {
+        currentToken = new token("AnyCharacter", i);
       } else {
         if (currentToken && currentToken.type === "Literal") {
           currentToken.value += char;
