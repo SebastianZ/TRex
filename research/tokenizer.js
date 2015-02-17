@@ -85,7 +85,15 @@
       } else if (char === "[") {
         let negated = (str[i + 1] === "^");
         charClass = true;
-        currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1), {negated: negated, body: []});
+        currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1),
+            {negated: negated, body: []});
+        stack.push(parentToken);
+        newParentToken = currentToken;
+      } else if (char === "-" && charClass) {
+        currentToken = new token("Range", currentToken.loc.start, i + 1,
+            {left: currentToken, right: null});
+        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        parentToken[parent].pop();
         stack.push(parentToken);
         newParentToken = currentToken;
       } else if ((char === ")" && !charClass) || (char === "]" && charClass)) {
@@ -120,6 +128,11 @@
         } else {
           currentToken = new token("Literal", i, null, {value: char});
         }
+      }
+
+      if (parentToken.type === "Range" && parentToken !== currentToken) {
+        parentToken.loc.end = currentToken.loc.end;
+        newParentToken = stack.pop();
       }
 
       if (addToParent) {
@@ -190,7 +203,8 @@
         else
           token.loc.end++;
 
-        let repetitions = str.substr(token.loc.start + 1, token.loc.end - 1).match(/^(\d*)(,(\d*))?\}/);
+        let repetitions = str.substr(token.loc.start + 1, token.loc.end - 1).
+            match(/^(\d*)(,(\d*))?\}/);
         if (repetitions) {
           if (repetitions[3] !== undefined) {
             token.type = "Variable" + token.type;
