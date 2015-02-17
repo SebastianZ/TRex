@@ -18,7 +18,7 @@
       }
       this.loc = {
         start: start,
-        end: end
+        end: end || start + 1
       }
     }
 
@@ -36,7 +36,7 @@
         currentToken.loc.end++;
         addToParent = false;
       } else {
-        currentToken = new token("Literal", i, i + 1, {value: char});
+        currentToken = new token("Literal", i, null, {value: char});
       }
 
       if (addToParent) {
