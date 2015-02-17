@@ -60,13 +60,36 @@
     let length = str.length;
     let i = 0;
     let ast = new token("RegularExpression", i, length, {body: []});
+    let parentToken = ast;
     let parent = ast.body;
-    let currentToken = null;
+    let currentToken = ast;
+    let stack = [];
     while (i < length) {
       let char = str.charAt(i);
       let addToParent = true;
+      let newParentToken = null;
 
-      if (char === "\\") {
+      if (char === "(") {
+        currentToken = new token("", i, null, {body: []});
+        this.parseGroup(str, currentToken);
+
+        if (currentToken.type === "CapturingGroup") {
+          this.capturingGroups.push(currentToken);
+        }
+
+        stack.push(parentToken);
+        newParentToken = currentToken;
+      } else if (char === ")") {
+        if (stack.length > 0) {
+          let stackToken = stack.pop();
+          currentToken = parentToken;
+          currentToken.loc.end = i + 1;
+          newParentToken = stackToken;
+          addToParent = false;
+        } else {
+          currentToken.error = "additionalClosingGroup";
+        }
+      } else if (char === "\\") {
         currentToken = new token("", i);
         this.parseEscapeSequence(str, currentToken);
       } else if (char === ".") {
@@ -94,12 +117,36 @@
         }
       }
 
+      if (newParentToken) {
+        parentToken = newParentToken;
+        parent = newParentToken[newParentToken.hasOwnProperty("right") ? "right" : "body"];
+      }
+
       i = currentToken.loc.end;
     }
 
     this.token = ast;
 
     return ast;
+  };
+
+  prototype.parseGroup = function(str, token) {
+    let match = str.substr(token.loc.start, 3).match(/\?(?::|<?[!=])/);
+    if (match) {
+      if (match[0].contains(":")) {
+        token.type = "NonCapturingGroup";
+      } else {
+        token.type = match[0].contains("=") ? "Positive" : "Negative";
+        token.type += "Look" + (match[0].contains("<") ? "Behind" : "Ahead");
+
+        if (match[0].contains("<"))
+          token.error = "lookbehind";
+      }
+
+      token.loc.end += match[0].length; 
+    } else {
+      token.type = "CapturingGroup";
+    }
   };
 
   prototype.parseQuantifier = function(str, token) {
