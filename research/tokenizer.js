@@ -71,6 +71,8 @@
         this.parseEscapeSequence(str, currentToken);
       } else if (char === ".") {
         currentToken = new token("AnyCharacter", i);
+      } else if (char === "^" || char === "$") {
+        currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
       } else {
         if (currentToken && currentToken.type === "Literal") {
           currentToken.value += char;
