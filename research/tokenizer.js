@@ -102,6 +102,13 @@
         }
 
         if (stack.length > 0) {
+          while (parentToken.type === "Alternation") {
+            parentToken.loc.end = parentToken.right.length > 0 ?
+                parentToken.right[parentToken.right.length - 1].loc.end :
+                parentToken.loc.start + 1;
+            parentToken = stack.pop();
+          }
+
           let stackToken = stack.pop();
           currentToken = parentToken;
           currentToken.loc.end = i + 1;
@@ -120,6 +127,14 @@
         this.parseQuantifier(str, currentToken);
       } else if ((char === "^" || char === "$") && !charClass) {
         currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
+      } else if (char === "|" && !charClass) {
+        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        let startLoc = parentToken[parent][0] ? parentToken[parent][0].loc.start : i;
+        currentToken = new token("Alternation", startLoc, i + 1,
+            {left: parentToken[parent], right: []});
+        parentToken[parent] = [];
+        stack.push(parentToken);
+        newParentToken = currentToken;
       } else {
         if (currentToken && currentToken.type === "Literal" && !charClass) {
           currentToken.value += char;
