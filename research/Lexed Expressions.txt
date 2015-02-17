@@ -160,7 +160,7 @@ a(bc)
 
 --------------------------------------------------
 
-a[bc]
+a[bc][^de]
 
 {
   type: "RegularExpression",
@@ -177,6 +177,7 @@ a[bc]
     },
     {
       type: "CharacterClass",
+      negated: false,
       body:
       [
         {
@@ -204,11 +205,41 @@ a[bc]
         end: 5
       }
     }
+    {
+      type: "CharacterClass",
+      negated: true,
+      body:
+      [
+        {
+          type: "Literal",
+          value: "d",
+          loc:
+          {
+            start: 7,
+            end: 8
+          }
+        },
+        {
+          type: "Literal",
+          value: "e",
+          loc:
+          {
+            start: 8,
+            end: 9
+          }
+        }
+      ],
+      loc:
+      {
+        start: 5,
+        end: 10
+      }
+    }
   ],
   loc:
   {
     start: 0,
-    end: 5
+    end: 10
   }
 }
 
