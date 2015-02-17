@@ -169,6 +169,11 @@
         let tdName = document.createElement("td");
         tdName.textContent = test.name;
 
+        let tdRegExp = document.createElement("td");
+        let code = document.createElement("code")
+        code.textContent = test.regExp;
+        tdRegExp.appendChild(code);
+
         let tdResult = document.createElement("td");
         tdResult.textContent = (testOK ? "OK" : "FAILED");
 
@@ -194,6 +199,7 @@
         }
 
         tr.appendChild(tdName);
+        tr.appendChild(tdRegExp);
         tr.appendChild(tdResult);
         tr.appendChild(tdDetails);
 
@@ -211,6 +217,7 @@
       <thead>
         <tr>
           <th>Test</th>
+          <th>Expression</th>
           <th>Result</th>
           <th>Details</th>
         </tr>
