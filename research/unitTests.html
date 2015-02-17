@@ -171,14 +171,26 @@
 
         let tdResult = document.createElement("td");
         tdResult.textContent = (testOK ? "OK" : "FAILED");
-        if (result instanceof Error)
-          tdResult.textContent += " (" + result + ")";
 
         let tdDetails = document.createElement("td");
         if (!testOK) {
-          tdDetails.innerHTML = '<strong>Expected:</strong><br/><code>' +
-              test.expected + '</code><br/><strong>Observed:</strong><br/><code>' +
-              stringifiedResult + '</code>';
+          let details = "";
+          if (result instanceof Error) {
+            details += "<strong>Exception:</strong><br/>" + result;
+            if (result.lineNumber !== 0) {
+              details += " (line: " + result.lineNumber;
+              if (result.columnNumber !== 0) {
+                details += ", column: " + result.columnNumber;
+              }
+              details += ")";
+            }
+          } else {
+            details = '<strong>Expected:</strong><br/><code>' +
+                test.expected + '</code><br/><strong>Observed:</strong><br/><code>' +
+                stringifiedResult + '</code>'
+          }
+
+          tdDetails.innerHTML = details;
         }
 
         tr.appendChild(tdName);
