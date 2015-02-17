@@ -4,6 +4,41 @@
   let RegExpTokenizer = function() { };
   let prototype = RegExpTokenizer.prototype;
 
+  RegExpTokenizer.ESCAPE_CHAR_TYPES = [
+    "ControlEscape",
+    "ControlLetterEscape",
+    "HexEscapeSequence",
+    "UnicodeEscapeSequence",
+    "IdentityEscape",
+    "CharacterClassEscape"
+  ];
+
+  RegExpTokenizer.ESCAPE_CHARS = {
+    "f": 0,
+    "n": 0,
+    "r": 0,
+    "t": 0,
+    "v": 0,
+    "c": 1,
+    "x": 2,
+    "u": 3,
+    "d": 5,
+    "D": 5,
+    "s": 5,
+    "S": 5,
+    "w": 5,
+    "W": 5
+  };
+
+  RegExpTokenizer.ESCACPE_CHAR_CODES = {
+    "0" : 0,
+    "t" : 9,
+    "n" : 10,
+    "v" : 11,
+    "f" : 12,
+    "r" : 13
+  };
+
   prototype.token = null;
   prototype.capturingGroups = [];
 
@@ -31,12 +66,17 @@
       let char = str.charAt(i);
       let addToParent = true;
 
-      if (currentToken && currentToken.type === "Literal") {
-        currentToken.value += char;
-        currentToken.loc.end++;
-        addToParent = false;
+      if (char === "\\") {
+        currentToken = new token("", i);
+        this.parseEscapeSequence(str, currentToken);
       } else {
-        currentToken = new token("Literal", i, null, {value: char});
+        if (currentToken && currentToken.type === "Literal") {
+          currentToken.value += char;
+          currentToken.loc.end++;
+          addToParent = false;
+        } else {
+          currentToken = new token("Literal", i, null, {value: char});
+        }
       }
 
       if (addToParent) {
@@ -53,6 +93,42 @@
     this.token = ast;
 
     return ast;
+  };
+
+  prototype.parseEscapeSequence = function(str, token) {
+    let escapeCharType = RegExpTokenizer.ESCAPE_CHARS[str[token.loc.end]];
+    if (escapeCharType === undefined)
+      escapeCharType = 4;
+    token.type = RegExpTokenizer.ESCAPE_CHAR_TYPES[escapeCharType];
+    switch (token.type) {
+      case "ControlEscape":
+      case "IdentityEscape":
+      case "CharacterClassEscape":
+        token.char = str[token.loc.end];
+        if (token.type == "ControlEscape") {
+          token.value = RegExpTokenizer.ESCACPE_CHAR_CODES[token.char];
+        }
+        token.loc.end++;
+        break;
+
+      case "ControlLetterEscape":
+        token.char = str[token.loc.end + 1];
+        token.value = token.char.charCodeAt(0) - 64;
+        token.loc.end += 2;
+        break;
+
+      case "HexEscapeSequence":
+        token.sequence = str.substr(token.loc.end + 1, 2);
+        token.loc.end += 3;
+        break;
+
+      case "UnicodeEscapeSequence":
+        token.sequence = str.substr(token.loc.end + 1, 4);
+        token.loc.end += 5;
+        break;
+    }
+
+    return;
   };
 
   window.RegExpTokenizer = RegExpTokenizer;
