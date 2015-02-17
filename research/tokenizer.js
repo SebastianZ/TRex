@@ -67,12 +67,13 @@
     let parent = ast.body;
     let currentToken = ast;
     let stack = [];
+    let charClass = false;
     while (i < length) {
       let char = str.charAt(i);
       let addToParent = true;
       let newParentToken = null;
 
-      if (char === "(") {
+      if (char === "(" && !charClass) {
         currentToken = new token("", i, null, {body: []});
         this.parseGroup(str, currentToken);
 
@@ -82,7 +83,17 @@
 
         stack.push(parentToken);
         newParentToken = currentToken;
-      } else if (char === ")") {
+      } else if (char === "[") {
+        let negated = (str[i + 1] === "^");
+        charClass = true;
+        currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1), {negated: negated, body: []});
+        stack.push(parentToken);
+        newParentToken = currentToken;
+      } else if ((char === ")" && !charClass) || (char === "]" && charClass)) {
+        if (char === "]" && charClass) {
+          charClass = false;
+        }
+
         if (stack.length > 0) {
           let stackToken = stack.pop();
           currentToken = parentToken;
@@ -95,15 +106,15 @@
       } else if (char === "\\") {
         currentToken = new token("", i);
         this.parseEscapeSequence(str, currentToken);
-      } else if (char === ".") {
+      } else if (char === "." && !charClass) {
         currentToken = new token("AnyCharacter", i);
-      } else if ("?*+{".contains(char)) {
+      } else if ("?*+{".contains(char) && !charClass) {
         currentToken = new token("", i, null, {lazy: false});
         this.parseQuantifier(str, currentToken);
-      } else if (char === "^" || char === "$") {
+      } else if ((char === "^" || char === "$") && !charClass) {
         currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
       } else {
-        if (currentToken && currentToken.type === "Literal") {
+        if (currentToken && currentToken.type === "Literal" && !charClass) {
           currentToken.value += char;
           currentToken.loc.end++;
           addToParent = false;
