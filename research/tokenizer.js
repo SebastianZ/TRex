@@ -64,7 +64,6 @@
     let i = 0;
     let ast = new token("RegularExpression", i, length, {body: []});
     let parentToken = ast;
-    let parent = ast.body;
     let currentToken = ast;
     let stack = [];
     let charClass = false;
@@ -124,16 +123,16 @@
       }
 
       if (addToParent) {
-        if (Array.isArray(parent)) {
-          parent.push(currentToken);
+        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        if (Array.isArray(parentToken[parent])) {
+          parentToken[parent].push(currentToken);
         } else {
-          parent = currentToken;
+          parentToken[parent] = currentToken;
         }
       }
 
       if (newParentToken) {
         parentToken = newParentToken;
-        parent = newParentToken[newParentToken.hasOwnProperty("right") ? "right" : "body"];
       }
 
       i = currentToken.loc.end;
