@@ -76,10 +76,11 @@
         {
           name: "Character class range",
           regExp: "[a-c]",
-          expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass","body":' +
-              '[{"type":"Range","left":{"type":"Literal","value":"a","loc":{"start":1,"end":2}},' +
-              '"loc":{"start":1,"end":4},"right":{"type":"Literal","value":"c","loc":{"start":3,' +
-              '"end":4}}}],"loc":{"start":0,"end":5}}],"loc":{"start":0,"end":5}}'
+          expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Range","left":{"type":"Literal","value":"a",' +
+              '"loc":{"start":1,"end":2}},"right":{"type":"Literal","value":"c",' +
+              '"loc":{"start":3,"end":4}},"loc":{"start":1,"end":4}}],"loc":{"start":0,' +
+              '"end":5}}],"loc":{"start":0,"end":5}}'
         },
         {
           name: "Quantifiers",
