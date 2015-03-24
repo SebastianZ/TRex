@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Regular expexpressions highlighter</title>
+    <style type="text/css">
+    #regExpHighlighter {
+      border: 1px solid gray;
+      padding: 5px;
+      font-family: monospace;
+    }
+
+    .bracket {
+      background-color: lightblue;
+    }
+    </style>
+    <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
+    <script type="application/javascript;version=1.8">
+    function tokenize() {
+      var regExp = document.getElementById("regExp").value;
+      return tokenizer.tokenize(regExp);
+    }
+
+    function highlight() {
+      function outputToken(parent, token) {
+        switch(token.type) {
+          case "Alternation":
+            var tokenSpan = document.createElement("span");
+            tokenSpan.setAttribute("class", token.type);
+
+            token.left.forEach(function outputSubToken(subToken) {
+              outputToken(tokenSpan, subToken);
+            });
+
+            var pipeSpan = document.createElement("span");
+            pipeSpan.setAttribute("class", "pipe");
+            pipeSpan.textContent = "|";
+            tokenSpan.appendChild(pipeSpan);
+
+            token.right.forEach(function outputSubToken(subToken) {
+              outputToken(tokenSpan, subToken);
+            });
+
+            parent.appendChild(tokenSpan);
+            break;
+            
+          case "CapturingGroup":
+            var groupOpening = "(";
+
+          case "NonCapturingGroup":
+            if (token.type === "NonCapturingGroup") {
+              var groupOpening = "(?:"
+            }
+            var tokenSpan = document.createElement("span");
+            tokenSpan.setAttribute("class", token.type);
+            var leftBracketSpan = document.createElement("span");
+            leftBracketSpan.setAttribute("class", "bracket");
+            leftBracketSpan.textContent = groupOpening;
+            tokenSpan.appendChild(leftBracketSpan);
+
+            token.body.forEach(function outputSubToken(subToken) {
+              outputToken(tokenSpan, subToken);
+            });
+
+            var rightBracketSpan = leftBracketSpan.cloneNode();
+            rightBracketSpan.textContent = ")";
+            tokenSpan.appendChild(rightBracketSpan);
+
+            parent.appendChild(tokenSpan);
+            break;
+
+          default:
+            var tokenSpan = document.createElement("span");
+            tokenSpan.setAttribute("class", token.type);
+            if (token.value !== undefined) {
+              tokenSpan.textContent = token.value;
+            }
+            parent.appendChild(tokenSpan);
+
+            if (token.body) {
+              token.body.forEach(function outputSubToken(subToken) {
+                outputToken(tokenSpan, subToken);
+              });
+            }
+        }
+      }
+
+      var regExp = tokenize();
+      var regExpHighlighterField = document.getElementById("regExpHighlighter");
+      regExpHighlighterField.textContent = "";
+      outputToken(regExpHighlighterField, regExp);
+    }
+
+    var tokenizer = new RegExpTokenizer();
+
+    window.addEventListener("DOMContentLoaded", function onLoad() {
+      var regExpField = document.getElementById("regExp");
+      
+      regExpField.addEventListener("keydown", function onRegExpFieldKeyDown(evt) {
+        if (evt.keyCode === KeyEvent.DOM_VK_RETURN) {
+          highlight();
+          evt.preventDefault();
+        }
+      });
+
+      var highlightButton = document.getElementById("highlight");
+      highlightButton.addEventListener("click", highlight);
+    });
+    </script>
+  </head>
+  <body>
+    <textarea id="regExp" cols="100" rows="5">abc</textarea>
+    <button id="highlight">Highlight</button>
+    <div id="regExpHighlighter"></div>
+  </body>
+</html>
