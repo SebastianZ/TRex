@@ -15,7 +15,7 @@
     }
 
     .error {
-      border-bottom: 1px solid red;
+      border-bottom: 2px solid red;
     }
     </style>
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
@@ -75,9 +75,9 @@
               var rightBracketSpan = leftBracketSpan.cloneNode();
               rightBracketSpan.textContent = ")";
               tokenSpan.appendChild(rightBracketSpan);
-
-              parent.appendChild(tokenSpan);
             }
+
+            parent.appendChild(tokenSpan);
             break;
 
           default:
