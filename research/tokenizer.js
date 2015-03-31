@@ -118,7 +118,7 @@
           newParentToken = stackToken;
           addToParent = false;
         } else {
-          currentToken.error = "additionalClosingGroup";
+          currentToken.error = "AdditionalClosingBracket";
         }
       } else if (char === "\\") {
         currentToken = new token("", i);
