@@ -63,6 +63,7 @@
             leftBracketSpan.classList.add("bracket");
             if (token.error) {
               leftBracketSpan.classList.add("error");
+              leftBracketSpan.title = token.error;
             }
             leftBracketSpan.textContent = groupOpening;
             tokenSpan.appendChild(leftBracketSpan);
