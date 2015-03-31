@@ -13,6 +13,10 @@
     .bracket {
       background-color: lightblue;
     }
+
+    .error {
+      border-bottom: 1px solid red;
+    }
     </style>
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
     <script type="application/javascript;version=1.8">
@@ -52,9 +56,12 @@
               var groupOpening = "(?:"
             }
             var tokenSpan = document.createElement("span");
-            tokenSpan.setAttribute("class", token.type);
+            tokenSpan.classList.add(token.type);
             var leftBracketSpan = document.createElement("span");
-            leftBracketSpan.setAttribute("class", "bracket");
+            leftBracketSpan.classList.add("bracket");
+            if (token.error) {
+              leftBracketSpan.classList.add("error");
+            }
             leftBracketSpan.textContent = groupOpening;
             tokenSpan.appendChild(leftBracketSpan);
 
@@ -62,11 +69,13 @@
               outputToken(tokenSpan, subToken);
             });
 
-            var rightBracketSpan = leftBracketSpan.cloneNode();
-            rightBracketSpan.textContent = ")";
-            tokenSpan.appendChild(rightBracketSpan);
+            if (!token.error) {
+              var rightBracketSpan = leftBracketSpan.cloneNode();
+              rightBracketSpan.textContent = ")";
+              tokenSpan.appendChild(rightBracketSpan);
 
-            parent.appendChild(tokenSpan);
+              parent.appendChild(tokenSpan);
+            }
             break;
 
           default:
