@@ -22,7 +22,9 @@
     <script type="application/javascript;version=1.8">
     function tokenize() {
       var regExp = document.getElementById("regExp").value;
-      return tokenizer.tokenize(regExp);
+      tokenizedRegExp = tokenizer.tokenize(regExp);
+      console.log(tokenizedRegExp);
+      return tokenizedRegExp;
     }
 
     function highlight() {
