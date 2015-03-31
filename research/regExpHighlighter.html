@@ -96,21 +96,14 @@
     window.addEventListener("DOMContentLoaded", function onLoad() {
       var regExpField = document.getElementById("regExp");
       
-      regExpField.addEventListener("keydown", function onRegExpFieldKeyDown(evt) {
-        if (evt.keyCode === KeyEvent.DOM_VK_RETURN) {
-          highlight();
-          evt.preventDefault();
-        }
+      regExpField.addEventListener("keyup", function onRegExpFieldKeyDown(evt) {
+        highlight();
       });
-
-      var highlightButton = document.getElementById("highlight");
-      highlightButton.addEventListener("click", highlight);
     });
     </script>
   </head>
   <body>
     <textarea id="regExp" cols="100" rows="5">abc</textarea>
-    <button id="highlight">Highlight</button>
     <div id="regExpHighlighter"></div>
   </body>
 </html>
