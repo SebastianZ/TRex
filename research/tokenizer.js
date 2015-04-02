@@ -118,7 +118,8 @@
           newParentToken = stackToken;
           addToParent = false;
         } else {
-          currentToken.error = "AdditionalClosingBracket";
+          currentToken = new token("Literal", i, null, {value: char,
+              error: "AdditionalClosingBracket"});
         }
       } else if (char === "\\") {
         currentToken = new token("", i);
@@ -139,7 +140,7 @@
         stack.push(parentToken);
         newParentToken = currentToken;
       } else {
-        if (currentToken && currentToken.type === "Literal" && !charClass) {
+        if (currentToken && currentToken.type === "Literal" && !charClass && !currentToken.error) {
           currentToken.value += char;
           currentToken.loc.end++;
           addToParent = false;
