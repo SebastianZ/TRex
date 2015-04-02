@@ -106,8 +106,9 @@
     var tokenizer = new RegExpTokenizer();
 
     window.addEventListener("DOMContentLoaded", function onLoad() {
+      highlight();
+
       var regExpField = document.getElementById("regExp");
-      
       regExpField.addEventListener("keyup", function onRegExpFieldKeyDown(evt) {
         highlight();
       });
