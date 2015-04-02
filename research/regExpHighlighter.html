@@ -4,10 +4,26 @@
     <meta charset="UTF-8" />
     <title>Regular expressions highlighter</title>
     <style type="text/css">
+    body {
+      position: relative;
+    }
+
+    #regExp,
     #regExpHighlighter {
+      position: relative;
+      top: 0;
+      left: 0;
+      margin: 0;
+      width: 500px;
+      height: 1em;
       border: 1px solid gray;
+      line-height: 1em;
       padding: 5px;
       font-family: monospace;
+    }
+
+    #regExp {
+      resize: none;
     }
 
     .bracket {
@@ -116,7 +132,7 @@
     </script>
   </head>
   <body>
-    <textarea id="regExp" cols="100" rows="5">a(b|c)</textarea>
+    <textarea id="regExp" cols="100" rows="1">a(b|c)</textarea>
     <div id="regExpHighlighter"></div>
   </body>
 </html>
