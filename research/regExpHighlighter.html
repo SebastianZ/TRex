@@ -44,6 +44,29 @@
     }
 
     function highlight() {
+      brackets = {
+          "CapturingGroup": {
+            opening: "(",
+            closing: ")"
+          },
+          "NonCapturingGroup": {
+            opening: "(?:",
+            closing: ")"
+          },
+          "PositiveLookAhead": {
+            opening: "(?=",
+            closing: ")"
+          },
+          "NegativeLookAhead": {
+            opening: "(?!",
+            closing: ")"
+          },
+          "CharacterClass": {
+            opening: "[",
+            closing: "]"
+          }
+      }
+
       function outputToken(parent, token) {
         switch(token.type) {
           case "Alternation":
@@ -67,12 +90,11 @@
             break;
             
           case "CapturingGroup":
-            var groupOpening = "(";
-
           case "NonCapturingGroup":
-            if (token.type === "NonCapturingGroup") {
-              var groupOpening = "(?:"
-            }
+          case "PositiveLookAhead":
+          case "NegativeLookAhead":
+          case "CharacterClass":
+            var groupBrackets = brackets[token.type];
             var tokenSpan = document.createElement("span");
             tokenSpan.classList.add(token.type);
             var leftBracketSpan = document.createElement("span");
@@ -81,7 +103,7 @@
               leftBracketSpan.classList.add("error");
               leftBracketSpan.title = token.error;
             }
-            leftBracketSpan.textContent = groupOpening;
+            leftBracketSpan.textContent = groupBrackets.opening;
             tokenSpan.appendChild(leftBracketSpan);
 
             token.body.forEach(function outputSubToken(subToken) {
@@ -90,7 +112,7 @@
 
             if (!token.error) {
               var rightBracketSpan = leftBracketSpan.cloneNode();
-              rightBracketSpan.textContent = ")";
+              rightBracketSpan.textContent = groupBrackets.closing;
               tokenSpan.appendChild(rightBracketSpan);
             }
 
