@@ -170,8 +170,14 @@
       i = currentToken.loc.end;
     }
 
-    if (parentToken.error) {
+    if (stack.length > 0) {
       parentToken.loc.end = currentToken.loc.end;
+
+      while (stack.length > 0) {
+        currentToken = parentToken;
+        parentToken = stack.pop();
+        parentToken.loc.end = currentToken.loc.end;
+      }
     }
 
     this.token = ast;
