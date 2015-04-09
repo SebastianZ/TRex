@@ -28,9 +28,24 @@
     th:nth-child(2), td:nth-child(2) {
       text-align: center;
     }
+
+    .diff {
+      background-color: #ffb4b4;
+    }
     </style>
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
     <script type="application/javascript;version=1.8">
+    function highlightDifference(string1, string2) {
+      for(var i = 0; i < string2.length; i++) {
+        if (string1[i] !== string2[i]) {
+          return string1.substring(0, i) + '<span class="diff">' + string1.substr(i, 1) +
+              '</span>' + string1.substring(i + 1);
+        }
+      }
+
+      return string1;
+    }
+
     function runTests() {
       let tests = [
         {
@@ -204,7 +219,7 @@
           } else {
             details = '<strong>Expected:</strong><br/><code>' +
                 test.expected + '</code><br/><strong>Observed:</strong><br/><code>' +
-                stringifiedResult + '</code>'
+                highlightDifference(stringifiedResult, test.expected) + '</code>'
           }
 
           tdDetails.innerHTML = details;
