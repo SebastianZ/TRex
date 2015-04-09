@@ -186,6 +186,14 @@
               '"value":"b","loc":{"start":4,"end":5}}],"loc":{"start":1,"end":6}}],"loc":' +
               '{"start":0,"end":6}}'
         },
+        {
+          name: "Missing closing bracket for capturing group",
+          regExp: "a(b",
+          expected: '{"type":"RegularExpression","body":[{"type":"Literal","value":"a","loc":' +
+              '{"start":0,"end":1}},{"type":"CapturingGroup","error":"NoClosingBracket","body":[{"type":"Literal",' +
+              '"value":"b","loc":{"start":2,"end":3}}],"loc":{"start":1,"end":3}}],"loc":' +
+              '{"start":0,"end":3}}'
+        }
       ];
 
       let tokenizer = new RegExpTokenizer();
