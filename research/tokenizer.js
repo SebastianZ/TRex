@@ -170,6 +170,10 @@
       i = currentToken.loc.end;
     }
 
+    if (parentToken.error) {
+      parentToken.loc.end = currentToken.loc.end;
+    }
+
     this.token = ast;
 
     return ast;
@@ -233,8 +237,9 @@
             token.type = "Fixed" + token.type;
             token.repetitions = Number(repetitions[1]);
           }
-        } else
+        } else {
           token.error = "InvalidRepetitionQuantifier";
+        }
     }
 
     if (str[token.loc.end] === "?") {
