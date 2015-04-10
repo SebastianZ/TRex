@@ -266,15 +266,16 @@
       case "IdentityEscape":
       case "CharacterClassEscape":
         token.char = str[token.loc.end];
-        if (token.type == "ControlEscape") {
+        if (token.type === "ControlEscape") {
           token.value = RegExpTokenizer.ESCACPE_CHAR_CODES[token.char];
         }
 
         // Catch backslashes standing at the end of the regexp
         if (token.loc.end === str.length) {
           token.error = "danglingBackslash";
+        } else {
+          token.loc.end++;
         }
-        token.loc.end++;
         break;
 
       case "ControlLetterEscape":
