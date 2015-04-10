@@ -269,6 +269,11 @@
         if (token.type == "ControlEscape") {
           token.value = RegExpTokenizer.ESCACPE_CHAR_CODES[token.char];
         }
+
+        // Catch backslashes standing at the end of the regexp
+        if (token.loc.end === str.length) {
+          token.error = "danglingBackslash";
+        }
         token.loc.end++;
         break;
 
