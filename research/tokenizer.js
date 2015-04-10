@@ -140,7 +140,9 @@
         stack.push(parentToken);
         newParentToken = currentToken;
       } else {
-        if (currentToken && currentToken.type === "Literal" && !charClass && !currentToken.error) {
+        if (char === "/" && !charClass) {
+          currentToken = new token("Literal", i, null, {value: char, error: "unescapedSlash"});
+        } else if (currentToken && currentToken.type === "Literal" && !charClass && !currentToken.error) {
           currentToken.value += char;
           currentToken.loc.end++;
           addToParent = false;
