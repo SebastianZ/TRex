@@ -186,7 +186,7 @@
   };
 
   prototype.parseGroup = function(str, token) {
-    let match = str.substr(token.loc.start, 3).match(/\?(?::|<?[!=])/);
+    let match = str.substr(token.loc.start + 1, 3).match(/\?(?::|<?[!=])/);
     if (match) {
       if (match[0].contains(":")) {
         token.type = "NonCapturingGroup";
