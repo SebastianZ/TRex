@@ -165,6 +165,11 @@
         }
       }
 
+      if (parentToken.type === "Range" && parentToken.right &&
+          parentToken.left.value.charCodeAt(0) > parentToken.right.value.charCodeAt(0)) {
+        parentToken.error = "invalidRange";
+      }
+
       if (newParentToken) {
         parentToken = newParentToken;
       }
