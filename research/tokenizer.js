@@ -112,7 +112,7 @@
 
           let stackToken = stack.pop();
           currentToken = parentToken;
-          if (currentToken.error === "NoClosingBracket")
+          if (currentToken.error === "noClosingBracket")
             delete currentToken.error;
           currentToken.loc.end = i + 1;
           newParentToken = stackToken;
@@ -228,9 +228,9 @@
           token.loc.end = i;
         }
         if (i === str.length)
-          token.error = "RepetitionQuantifierNotClosed";
+          token.error = "repetitionQuantifierNotClosed";
         else if (str[i] !== "}")
-          token.error = "InvalidRepetitionQuantifier";
+          token.error = "invalidRepetitionQuantifier";
         else
           token.loc.end++;
 
@@ -246,7 +246,7 @@
             token.repetitions = Number(repetitions[1]);
           }
         } else {
-          token.error = "InvalidRepetitionQuantifier";
+          token.error = "invalidRepetitionQuantifier";
         }
     }
 
