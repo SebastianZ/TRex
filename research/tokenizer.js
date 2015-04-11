@@ -174,7 +174,7 @@
 
       if (parentToken.type === "Range" && parentToken.right &&
           parentToken.left.value.charCodeAt(0) > parentToken.right.value.charCodeAt(0)) {
-        parentToken.error = "invalidRange";
+        parentToken.error = "invalidCharRange";
       }
 
       if (newParentToken) {
@@ -249,7 +249,7 @@
           token.max = repetitions[2] !== "" ? Number(repetitions[2]) : null;
 
           if (token.min > token.max && token.max !== null) {
-            token.error = "invalidRepetitionQuantifier";
+            token.error = "invalidRepetitionRange";
           }
         } else {
           token.type = "Fixed" + token.type;
