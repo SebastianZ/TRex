@@ -138,6 +138,13 @@
             currentToken = new token("Literal", i, null, {value: char});
           }
         } else {
+          // Check whether the quantifier target is invalid
+          if (currentToken.type.match(/Quantifier|Anchor|^Alternation$/) ||
+              (currentToken.type.match(/Group|Look/) && currentToken.error) ||
+              (currentToken.type === "IdentityEscape" &&
+                  currentToken.char.toLowerCase() === "b")) {
+            quantifierToken.error = "invalidQuantifierTarget";
+          }
           currentToken = quantifierToken;
         }
       } else if ((char === "^" || char === "$") && !charClass) {
