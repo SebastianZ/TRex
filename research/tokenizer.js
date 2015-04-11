@@ -132,6 +132,7 @@
         if (quantifierToken.type === "") {
           currentToken.value += char;
           currentToken.loc.end++;
+          addToParent = false;
         } else {
           currentToken = quantifierToken;
         }
