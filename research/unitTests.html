@@ -132,9 +132,9 @@
         },
         {
           name: "No repetition quantifiers",
-          regExp: "a{}b{m}c{1,2,3}d{",
+          regExp: "a{}b{m}c{1,2,3}d{,}e{",
           expected: '{"type":"RegularExpression","body":[{"type":"Literal","value":' +
-              '"a{}b{m}c{1,2,3}d{","loc":{"start":0,"end":17}}],"loc":{"start":0,"end":17}}'
+              '"a{}b{m}c{1,2,3}d{,}e{","loc":{"start":0,"end":21}}],"loc":{"start":0,"end":21}}'
         },
         {
           name: "Start and end anchor",
