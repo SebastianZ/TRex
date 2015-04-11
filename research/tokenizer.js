@@ -130,9 +130,13 @@
         let quantifierToken = new token("", i);
         this.parseQuantifier(str, quantifierToken);
         if (quantifierToken.type === "") {
-          currentToken.value += char;
-          currentToken.loc.end++;
-          addToParent = false;
+          if (currentToken && currentToken.type === "Literal" && !currentToken.error) {
+            currentToken.value += char;
+            currentToken.loc.end++;
+            addToParent = false;
+          } else {
+            currentToken = new token("Literal", i, null, {value: char});
+          }
         } else {
           currentToken = quantifierToken;
         }
