@@ -73,7 +73,7 @@
       let newParentToken = null;
 
       if (char === "(" && !charClass) {
-        currentToken = new token("", i, null, {error: "NoClosingBracket", body: []});
+        currentToken = new token("", i, null, {error: "noClosingBracket", body: []});
         this.parseGroup(str, currentToken);
 
         if (currentToken.type === "CapturingGroup") {
@@ -86,7 +86,7 @@
         let negated = (str[i + 1] === "^");
         charClass = true;
         currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1),
-            {negated: negated, error: "NoClosingBracket", body: []});
+            {negated: negated, error: "noClosingBracket", body: []});
         stack.push(parentToken);
 
         newParentToken = currentToken;
@@ -119,7 +119,7 @@
           addToParent = false;
         } else {
           currentToken = new token("Literal", i, null, {value: char,
-              error: "AdditionalClosingBracket"});
+              error: "additionalClosingBracket"});
         }
       } else if (char === "\\") {
         currentToken = new token("", i);
