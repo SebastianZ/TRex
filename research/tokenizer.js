@@ -127,8 +127,14 @@
       } else if (char === "." && !charClass) {
         currentToken = new token("AnyCharacter", i);
       } else if ("?*+{".contains(char) && !charClass) {
-        currentToken = new token("", i, null, {lazy: false});
-        this.parseQuantifier(str, currentToken);
+        let quantifierToken = new token("", i);
+        this.parseQuantifier(str, quantifierToken);
+        if (quantifierToken.type === "") {
+          currentToken.value += char;
+          currentToken.loc.end++;
+        } else {
+          currentToken = quantifierToken;
+        }
       } else if ((char === "^" || char === "$") && !charClass) {
         currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
       } else if (char === "|" && !charClass) {
@@ -226,38 +232,35 @@
         break;
 
       case "{":
-        token.type = "RepetitionQuantifier";
-        let i = token.loc.end;
-        while (str[i] && /[\d,]/.test(str[i])) {
-          i++;
-          token.loc.end = i;
-        }
-        if (i === str.length)
-          token.error = "repetitionQuantifierNotClosed";
-        else if (str[i] !== "}")
-          token.error = "invalidRepetitionQuantifier";
-        else
-          token.loc.end++;
+        let repetitions = str.substr(token.loc.start).match(/^\{(\d*)(?:,(\d*))?\}/);
 
-        let repetitions = str.substr(token.loc.start + 1, token.loc.end - 1).
-            match(/^(\d*)(,(\d*))?\}/);
-        if (repetitions) {
-          if (repetitions[3] !== undefined) {
-            token.type = "Variable" + token.type;
-            token.min = repetitions[1] !== "" ? Number(repetitions[1]) : null;
-            token.max = repetitions[3] !== "" ? Number(repetitions[3]) : null;
-          } else {
-            token.type = "Fixed" + token.type;
-            token.repetitions = Number(repetitions[1]);
+        // If no repetition is found, the following characters are parsed normally without error
+        if (!repetitions || (!repetitions[1] && !repetitions[2])) {
+          return;
+        }
+
+        token.type = "RepetitionQuantifier";
+        token.loc.end += repetitions[0].length - 1;
+
+        if (repetitions[2] !== undefined) {
+          token.type = "Variable" + token.type;
+          token.min = repetitions[1] !== "" ? Number(repetitions[1]) : null;
+          token.max = repetitions[2] !== "" ? Number(repetitions[2]) : null;
+
+          if (token.min > token.max && token.max !== null) {
+            token.error = "invalidRepetitionQuantifier";
           }
         } else {
-          token.error = "invalidRepetitionQuantifier";
+          token.type = "Fixed" + token.type;
+          token.repetitions = Number(repetitions[1]);
         }
     }
 
     if (str[token.loc.end] === "?") {
       token.lazy = true;
       token.loc.end++;
+    } else {
+      token.lazy = false;
     }
   };
 
