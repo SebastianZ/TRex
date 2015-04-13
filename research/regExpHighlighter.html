@@ -29,7 +29,33 @@
 
       var regExpField = document.getElementById("regExp");
       regExpField.addEventListener("keyup", function onRegExpFieldKeyDown(evt) {
-        highlight();
+        var ignoredKeyCodes = [
+          KeyEvent.DOM_VK_LEFT,
+          KeyEvent.DOM_VK_RIGHT,
+          KeyEvent.DOM_VK_UP,
+          KeyEvent.DOM_VK_DOWN,
+          KeyEvent.DOM_VK_CONTROL,
+          KeyEvent.DOM_VK_ALT,
+          KeyEvent.DOM_VK_ALTGR,
+          KeyEvent.DOM_VK_META,
+          KeyEvent.DOM_VK_SHIFT,
+          KeyEvent.DOM_VK_CAPS_LOCK,
+          KeyEvent.DOM_VK_TAB,
+          KeyEvent.DOM_VK_RETURN,
+          KeyEvent.DOM_VK_CONTEXT_MENU,
+          KeyEvent.DOM_VK_ESCAPE,
+          KeyEvent.DOM_VK_HOME,
+          KeyEvent.DOM_VK_END,
+          KeyEvent.DOM_VK_PAGE_UP,
+          KeyEvent.DOM_VK_PAGE_DOWN,
+          KeyEvent.DOM_VK_NUM_LOCK,
+          KeyEvent.DOM_VK_PAUSE,
+          KeyEvent.DOM_VK_PRINTSCREEN
+        ];
+
+        if (ignoredKeyCodes.indexOf(evt.keyCode) === -1) {
+          highlight();
+        }
       });
     });
     </script>
