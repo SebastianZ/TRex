@@ -99,6 +99,12 @@
           tokenSpan.textContent += "}" + (token.lazy ? "?" : "");
           break;
 
+        case "Range":
+          outputToken(tokenSpan, token.left);
+          tokenSpan.appendChild(document.createTextNode("-"));
+          outputToken(tokenSpan, token.right);
+          break;
+
         default:
           if (token.value !== undefined) {
             tokenSpan.textContent = token.value;
