@@ -5,113 +5,24 @@
     <title>Regular expressions highlighter</title>
     <link href="regExpHighlighter.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
+    <script type="application/javascript;version=1.8" src="regExpHighlighter.js"></script>
     <script type="application/javascript;version=1.8">
-    function tokenize() {
-      var regExp = document.getElementById("regExp").value;
+    function tokenize(regExp) {
       tokenizedRegExp = tokenizer.tokenize(regExp);
       console.log(tokenizedRegExp);
       return tokenizedRegExp;
     }
 
     function highlight() {
-      brackets = {
-          "CapturingGroup": {
-            opening: "(",
-            closing: ")"
-          },
-          "NonCapturingGroup": {
-            opening: "(?:",
-            closing: ")"
-          },
-          "PositiveLookAhead": {
-            opening: "(?=",
-            closing: ")"
-          },
-          "NegativeLookAhead": {
-            opening: "(?!",
-            closing: ")"
-          },
-          "CharacterClass": {
-            opening: "[",
-            closing: "]"
-          }
-      }
+      let regExp = tokenize(document.getElementById("regExp").value);
+      let regExpHighlighter = document.getElementById("regExpHighlighter");
+      regExpHighlighter.textContent = "";
 
-      function outputToken(parent, token) {
-        switch(token.type) {
-          case "Alternation":
-            var tokenSpan = document.createElement("span");
-            tokenSpan.setAttribute("class", token.type);
-
-            token.left.forEach(function outputSubToken(subToken) {
-              outputToken(tokenSpan, subToken);
-            });
-
-            var pipeSpan = document.createElement("span");
-            pipeSpan.setAttribute("class", "pipe");
-            pipeSpan.textContent = "|";
-            tokenSpan.appendChild(pipeSpan);
-
-            token.right.forEach(function outputSubToken(subToken) {
-              outputToken(tokenSpan, subToken);
-            });
-
-            parent.appendChild(tokenSpan);
-            break;
-            
-          case "CapturingGroup":
-          case "NonCapturingGroup":
-          case "PositiveLookAhead":
-          case "NegativeLookAhead":
-          case "CharacterClass":
-            var groupBrackets = brackets[token.type];
-            var tokenSpan = document.createElement("span");
-            tokenSpan.classList.add(token.type);
-            var leftBracketSpan = document.createElement("span");
-            leftBracketSpan.classList.add("bracket");
-            if (token.error) {
-              leftBracketSpan.classList.add("error");
-              leftBracketSpan.title = token.error;
-            }
-            leftBracketSpan.textContent = groupBrackets.opening;
-            tokenSpan.appendChild(leftBracketSpan);
-
-            token.body.forEach(function outputSubToken(subToken) {
-              outputToken(tokenSpan, subToken);
-            });
-
-            if (!token.error) {
-              var rightBracketSpan = leftBracketSpan.cloneNode();
-              rightBracketSpan.textContent = groupBrackets.closing;
-              tokenSpan.appendChild(rightBracketSpan);
-            }
-
-            parent.appendChild(tokenSpan);
-            break;
-
-          default:
-            var tokenSpan = document.createElement("span");
-            tokenSpan.setAttribute("class", token.type);
-            if (token.value !== undefined) {
-              tokenSpan.textContent = token.value;
-            }
-            parent.appendChild(tokenSpan);
-
-            if (token.body) {
-              token.body.forEach(function outputSubToken(subToken) {
-                outputToken(tokenSpan, subToken);
-              });
-            }
-        }
-      }
-
-      var regExp = tokenize();
-      var regExpHighlighterField = document.getElementById("regExpHighlighter");
-      regExpHighlighterField.textContent = "";
-      outputToken(regExpHighlighterField, regExp);
+      regExpHighlighter.appendChild(highlighter.highlight(regExp));
     }
 
     var tokenizer = new RegExpTokenizer();
+    var highlighter = new RegExpHighlighter();
 
     window.addEventListener("DOMContentLoaded", function onLoad() {
       highlight();
