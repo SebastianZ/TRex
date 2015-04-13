@@ -90,7 +90,7 @@
         stack.push(parentToken);
 
         newParentToken = currentToken;
-      } else if (char === "-" && charClass && str[i + 1] !== "]") {
+      } else if (char === "-" && charClass && str[i + 1] !== undefined && str[i + 1] !== "]") {
         currentToken = new token("Range", currentToken.loc.start, i + 1,
             {left: currentToken, right: null});
         let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
