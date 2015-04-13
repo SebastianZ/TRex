@@ -29,11 +29,13 @@
     }
 
     function outputToken(parent, token) {
+      var handledError = false;
+
+      var tokenSpan = document.createElement("span");
+      tokenSpan.classList.add(token.type);
+
       switch(token.type) {
         case "Alternation":
-          var tokenSpan = document.createElement("span");
-          tokenSpan.setAttribute("class", token.type);
-
           token.left.forEach(function outputSubToken(subToken) {
             outputToken(tokenSpan, subToken);
           });
@@ -46,8 +48,6 @@
           token.right.forEach(function outputSubToken(subToken) {
             outputToken(tokenSpan, subToken);
           });
-
-          parent.appendChild(tokenSpan);
           break;
           
         case "CapturingGroup":
@@ -56,13 +56,12 @@
         case "NegativeLookAhead":
         case "CharacterClass":
           var groupBrackets = brackets[token.type];
-          var tokenSpan = document.createElement("span");
-          tokenSpan.classList.add(token.type);
           var leftBracketSpan = document.createElement("span");
           leftBracketSpan.classList.add("bracket");
           if (token.error) {
             leftBracketSpan.classList.add("error");
             leftBracketSpan.title = token.error;
+            handledError = true;
           }
           leftBracketSpan.textContent = groupBrackets.opening;
           tokenSpan.appendChild(leftBracketSpan);
@@ -76,17 +75,34 @@
             rightBracketSpan.textContent = groupBrackets.closing;
             tokenSpan.appendChild(rightBracketSpan);
           }
+          break;
 
-          parent.appendChild(tokenSpan);
+        case "OptionalQuantifier":
+        case "ZeroOrMoreQuantifier":
+        case "OneOrMoreQuantifier":
+          var tokenOutput = {
+            "OptionalQuantifier": "?",
+            "ZeroOrMoreQuantifier": "*",
+            "OneOrMoreQuantifier": "+"
+          };
+          tokenSpan.textContent = tokenOutput[token.type] + (token.lazy ? "?" : "");
+          break;
+
+        case "FixedRepetitionQuantifier":
+        case "VariableRepetitionQuantifier":
+          tokenSpan.textContent = "{";
+          if (token.type === "FixedRepetitionQuantifier") {
+            tokenSpan.textContent += token.repetitions;
+          } else {
+            tokenSpan.textContent += (token.min || "") + "," + (token.max || "");
+          }
+          tokenSpan.textContent += "}" + (token.lazy ? "?" : "");
           break;
 
         default:
-          var tokenSpan = document.createElement("span");
-          tokenSpan.setAttribute("class", token.type);
           if (token.value !== undefined) {
             tokenSpan.textContent = token.value;
           }
-          parent.appendChild(tokenSpan);
 
           if (token.body) {
             token.body.forEach(function outputSubToken(subToken) {
@@ -94,6 +110,13 @@
             });
           }
       }
+
+      if (token.error && !handledError) {
+        tokenSpan.classList.add("error");
+        tokenSpan.title = token.error;
+      }
+
+      parent.appendChild(tokenSpan);
     }
 
     let highlightedRegExp = new DocumentFragment();
