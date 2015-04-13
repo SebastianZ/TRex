@@ -1,0 +1,29 @@
+body {
+  position: relative;
+}
+
+#regExp,
+#regExpHighlighter {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin: 0;
+  width: 500px;
+  height: 1em;
+  border: 1px solid gray;
+  line-height: 1em;
+  padding: 5px;
+  font-family: monospace;
+}
+
+#regExp {
+  resize: none;
+}
+
+.bracket {
+  background-color: lightblue;
+}
+
+.error {
+  border-bottom: 2px solid red;
+}

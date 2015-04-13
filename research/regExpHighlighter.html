@@ -3,37 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Regular expressions highlighter</title>
-    <style type="text/css">
-    body {
-      position: relative;
-    }
-
-    #regExp,
-    #regExpHighlighter {
-      position: relative;
-      top: 0;
-      left: 0;
-      margin: 0;
-      width: 500px;
-      height: 1em;
-      border: 1px solid gray;
-      line-height: 1em;
-      padding: 5px;
-      font-family: monospace;
-    }
-
-    #regExp {
-      resize: none;
-    }
-
-    .bracket {
-      background-color: lightblue;
-    }
-
-    .error {
-      border-bottom: 2px solid red;
-    }
-    </style>
+    <link href="regExpHighlighter.css" rel="stylesheet" type="text/css" />
     <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
     <script type="application/javascript;version=1.8">
     function tokenize() {
