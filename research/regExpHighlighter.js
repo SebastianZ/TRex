@@ -83,6 +83,21 @@
           }
           break;
 
+        case "IdentityEscape":
+        case "CharacterClassEscape":
+        case "ControlEscape":
+        case "ControlLetterEscape":
+        case "HexEscapeSequence":
+        case "UnicodeEscapeSequence":
+          var prefix = {
+            "HexEscapeSequence": "x",
+            "UnicodeEscapeSequence": "u",
+            "ControlLetterEscape": "c"
+          }
+          tokenSpan.textContent = "\\" + (prefix[token.type] || "") +
+              (token.char || token.sequence || "");
+          break;
+
         case "StartAnchor":
         case "EndAnchor":
         case "OptionalQuantifier":
