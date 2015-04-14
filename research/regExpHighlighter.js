@@ -66,6 +66,10 @@
           leftBracketSpan.textContent = groupBrackets.opening;
           tokenSpan.appendChild(leftBracketSpan);
 
+          if (token.type === "CharacterClass" && token.negated) {
+            tokenSpan.appendChild(document.createTextNode("^"));
+          }
+
           token.body.forEach(function outputSubToken(subToken) {
             outputToken(tokenSpan, subToken);
           });
