@@ -314,7 +314,7 @@
 
       case "ControlLetterEscape":
         token.char = str[token.loc.end + 1] || "";
-        if (token.char === "") {
+        if (token.char !== "") {
           token.value = token.char.charCodeAt(0) - 64;
           token.loc.end += 2;
         } else {
