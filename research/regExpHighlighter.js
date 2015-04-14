@@ -5,29 +5,6 @@
   let prototype = RegExpHighlighter.prototype;
 
   prototype.highlight = function(token) {
-    let brackets = {
-        "CapturingGroup": {
-          opening: "(",
-          closing: ")"
-        },
-        "NonCapturingGroup": {
-          opening: "(?:",
-          closing: ")"
-        },
-        "PositiveLookAhead": {
-          opening: "(?=",
-          closing: ")"
-        },
-        "NegativeLookAhead": {
-          opening: "(?!",
-          closing: ")"
-        },
-        "CharacterClass": {
-          opening: "[",
-          closing: "]"
-        }
-    }
-
     function outputToken(parent, token) {
       var handledError = false;
 
@@ -54,7 +31,40 @@
         case "NonCapturingGroup":
         case "PositiveLookAhead":
         case "NegativeLookAhead":
+        case "PositiveLookBehind":
+        case "NegativeLookBehind":
         case "CharacterClass":
+          let brackets = {
+            "CapturingGroup": {
+              opening: "(",
+              closing: ")"
+            },
+            "NonCapturingGroup": {
+              opening: "(?:",
+              closing: ")"
+            },
+            "PositiveLookAhead": {
+              opening: "(?=",
+              closing: ")"
+            },
+            "NegativeLookAhead": {
+              opening: "(?!",
+              closing: ")"
+            },
+            "PositiveLookBehind": {
+              opening: "(?<=",
+              closing: ")"
+            },
+            "NegativeLookBehind": {
+              opening: "(?<!",
+              closing: ")"
+            },
+            "CharacterClass": {
+              opening: "[",
+              closing: "]"
+            }
+        }
+
           var groupBrackets = brackets[token.type];
           var leftBracketSpan = document.createElement("span");
           leftBracketSpan.classList.add("bracket");
