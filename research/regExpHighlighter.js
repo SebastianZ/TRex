@@ -86,7 +86,8 @@
             outputToken(tokenSpan, subToken);
           });
 
-          if (!token.error) {
+          if (!token.error || (token.body.length !== 0 &&
+              (token.loc.end === token.body[token.body.length - 1].loc.end + 1))) {
             var rightBracketSpan = leftBracketSpan.cloneNode();
             rightBracketSpan.textContent = groupBrackets.closing;
             tokenSpan.appendChild(rightBracketSpan);
