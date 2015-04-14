@@ -99,12 +99,19 @@
         },
         {
           name: "Character class range",
-          regExp: "[a-c]",
+          regExp: "[a-c][^a-c][a-ce]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
               '"negated":false,"body":[{"type":"Range","left":{"type":"Literal","value":"a",' +
-              '"loc":{"start":1,"end":2}},"right":{"type":"Literal","value":"c",' +
-              '"loc":{"start":3,"end":4}},"loc":{"start":1,"end":4}}],"loc":{"start":0,' +
-              '"end":5}}],"loc":{"start":0,"end":5}}'
+              '"loc":{"start":1,"end":2}},"right":{"type":"Literal","value":"c","loc":' +
+              '{"start":3,"end":4}},"loc":{"start":1,"end":4}}],"loc":{"start":0,"end":5}},' +
+              '{"type":"CharacterClass","negated":true,"body":[{"type":"Range","left":{"type":' +
+              '"Literal","value":"a","loc":{"start":7,"end":8}},"right":{"type":"Literal",' +
+              '"value":"c","loc":{"start":9,"end":10}},"loc":{"start":7,"end":10}}],"loc":' +
+              '{"start":5,"end":11}},{"type":"CharacterClass","negated":false,"body":[{"type":' +
+              '"Range","left":{"type":"Literal","value":"a","loc":{"start":12,"end":13}},' +
+              '"right":{"type":"Literal","value":"c","loc":{"start":14,"end":15}},"loc":' +
+              '{"start":12,"end":15}},{"type":"Literal","value":"e","loc":{"start":15,' +
+              '"end":16}}],"loc":{"start":11,"end":17}}],"loc":{"start":0,"end":17}}'
         },
         {
           name: "Quantifiers",
