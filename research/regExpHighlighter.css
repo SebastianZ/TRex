@@ -28,6 +28,10 @@ body {
   background-color: lightblue;
 }
 
+.group {
+	background-color: #ddeff4;
+}
+
 .error {
   border-bottom: 2px solid red;
 }

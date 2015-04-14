@@ -62,6 +62,8 @@
             leftBracketSpan.classList.add("error");
             leftBracketSpan.title = token.error;
             handledError = true;
+          } else {
+            tokenSpan.classList.add("group");
           }
           leftBracketSpan.textContent = groupBrackets.opening;
           tokenSpan.appendChild(leftBracketSpan);
