@@ -124,8 +124,19 @@
               error: "additionalClosingBracket"});
         }
       } else if (char === "\\") {
-        currentToken = new token("", i);
-        this.parseEscapeSequence(str, currentToken);
+        let escapeSequenceToken = new token("", i);
+        if (this.parseEscapeSequence(str, escapeSequenceToken)) {
+          currentToken = escapeSequenceToken;
+        } else {
+          if (currentToken && currentToken.type === "Literal" && !charClass &&
+              !currentToken.error) {
+            currentToken.value += char;
+            currentToken.loc.end++;
+            addToParent = false;
+          } else {
+            currentToken = new token("Literal", i, null, {value: char});
+          }
+        }
       } else if (char === "." && !charClass) {
         currentToken = new token("AnyCharacter", i);
       } else if ("?*+{".contains(char) && !charClass) {
@@ -302,23 +313,49 @@
         break;
 
       case "ControlLetterEscape":
-        token.char = str[token.loc.end + 1];
-        token.value = token.char.charCodeAt(0) - 64;
-        token.loc.end += 2;
+        token.char = str[token.loc.end + 1] || "";
+        if (token.char === "") {
+          token.value = token.char.charCodeAt(0) - 64;
+          token.loc.end += 2;
+        } else {
+          token.loc.end++;
+        }
         break;
 
-      case "HexEscapeSequence":
-        token.sequence = str.substr(token.loc.end + 1, 2);
-        token.loc.end += 3;
+      case "HexEscapeSequence": {
+          let sequence = str.substr(token.loc.end + 1, 2);
+  
+          // Only if the four characters following the backslash are a hex value the token is
+          // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
+          if (sequence.match(/^[a-f0-9]{2}$/)) {
+            token.sequence = sequence;
+            token.loc.end += 3;
+          } else {
+            token.type = "IdentityEscape";
+            token.char = "x";
+            token.loc.end++;
+          }
+        }
         break;
 
-      case "UnicodeEscapeSequence":
-        token.sequence = str.substr(token.loc.end + 1, 4);
-        token.loc.end += 5;
+      case "UnicodeEscapeSequence": {
+          let sequence = str.substr(token.loc.end + 1, 4);
+  
+          // Only if the four characters following the backslash are a hex value the token is
+          // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
+          if (sequence.match(/^[a-f0-9]{4}$/)) {
+            token.sequence = sequence;
+            token.loc.end += 5;
+          } else {
+            token.type = "IdentityEscape";
+            token.char = "u";
+            token.loc.end++;
+          }
+        }
         break;
     }
 
-    return;
+    return true;
   };
 
   window.RegExpTokenizer = RegExpTokenizer;
