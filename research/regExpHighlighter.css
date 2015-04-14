@@ -33,6 +33,15 @@ body {
 	background-color: #ddeff4;
 }
 
+.IdentityEscape,
+.CharacterClassEscape,
+.ControlEscape,
+.ControlLetterEscape,
+.HexEscapeSequence,
+.UnicodeEscapeSequence {
+	background-color: #ddf4dd;
+}
+
 .error {
   border-bottom: 2px solid red;
 }
