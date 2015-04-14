@@ -77,10 +77,14 @@
           }
           break;
 
+        case "StartAnchor":
+        case "EndAnchor":
         case "OptionalQuantifier":
         case "ZeroOrMoreQuantifier":
         case "OneOrMoreQuantifier":
           var tokenOutput = {
+            "StartAnchor": "^",
+            "EndAnchor": "$",
             "OptionalQuantifier": "?",
             "ZeroOrMoreQuantifier": "*",
             "OneOrMoreQuantifier": "+"
