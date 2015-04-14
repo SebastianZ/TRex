@@ -327,7 +327,7 @@
   
           // Only if the four characters following the backslash are a hex value the token is
           // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
-          if (sequence.match(/^[a-f0-9]{2}$/)) {
+          if (sequence.match(/^[a-f0-9]{2}$/i)) {
             token.sequence = sequence;
             token.loc.end += 3;
           } else {
@@ -343,7 +343,7 @@
   
           // Only if the four characters following the backslash are a hex value the token is
           // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
-          if (sequence.match(/^[a-f0-9]{4}$/)) {
+          if (sequence.match(/^[a-f0-9]{4}$/i)) {
             token.sequence = sequence;
             token.loc.end += 5;
           } else {
