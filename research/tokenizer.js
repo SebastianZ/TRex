@@ -91,7 +91,8 @@
 
         newParentToken = currentToken;
       } else if (char === "-" && charClass && str[i + 1] !== undefined &&
-          str[i - 1] !== "[" && !(str[i - 1] === "^" && str[i - 2] === "[") && str[i + 1] !== "]") {
+          str[i - 1] !== "[" && !(str[i - 1] === "^" && str[i - 2] === "[") &&
+          str[i + 1] !== "]") {
         currentToken = new token("Range", currentToken.loc.start, i + 1,
             {left: currentToken, right: null});
         let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
@@ -161,7 +162,8 @@
       } else {
         if (char === "/" && !charClass) {
           currentToken = new token("Literal", i, null, {value: char, error: "unescapedSlash"});
-        } else if (currentToken && currentToken.type === "Literal" && !charClass && !currentToken.error) {
+        } else if (currentToken && currentToken.type === "Literal" && !charClass &&
+            !currentToken.error) {
           currentToken.value += char;
           currentToken.loc.end++;
           addToParent = false;
