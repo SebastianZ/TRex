@@ -100,12 +100,14 @@
 
         case "StartAnchor":
         case "EndAnchor":
+        case "AnyCharacter":
         case "OptionalQuantifier":
         case "ZeroOrMoreQuantifier":
         case "OneOrMoreQuantifier":
           var tokenOutput = {
             "StartAnchor": "^",
             "EndAnchor": "$",
+            "AnyCharacter": ".",
             "OptionalQuantifier": "?",
             "ZeroOrMoreQuantifier": "*",
             "OneOrMoreQuantifier": "+"
