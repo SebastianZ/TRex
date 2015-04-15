@@ -114,6 +114,13 @@
               '"end":16}}],"loc":{"start":11,"end":17}}],"loc":{"start":0,"end":17}}'
         },
         {
+          name: "No nested character class",
+          regExp: "[[]",
+          expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Literal","value":"[","loc":{"start":1,' +
+              '"end":2}}],"loc":{"start":0,"end":3}}],"loc":{"start":0,"end":3}}'
+        },
+        {
           name: "Dash at the beginning or end of a character class",
           regExp: "[-a][^-a][a-]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
