@@ -63,7 +63,7 @@
               opening: "[",
               closing: "]"
             }
-        }
+          }
 
           var groupBrackets = brackets[token.type];
           var leftBracketSpan = document.createElement("span");
