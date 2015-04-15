@@ -8,6 +8,16 @@
     function outputToken(parent, token) {
       var handledError = false;
 
+      var errorMessages = new Map();
+      errorMessages.set("noClosingBracket", "Unmatched opening bracket.");
+      errorMessages.set("additionalClosingBracket", "Unmatched closing bracket.");
+      errorMessages.set("unescapedSlash", "Unescasped forward slash.");
+      errorMessages.set("invalidCharRange", "Range values reversed. Start character is greater than end character.");
+      errorMessages.set("lookbehind", "Lookbehinds not supported in JavaScript.");
+      errorMessages.set("invalidRepetitionRange", "Quantifier minimum is greater than maximum.");
+      errorMessages.set("danglingBackslash", "Dangling backslash.");
+      errorMessages.set("invalidQuantifierTarget", "Invalid target for quantifier.");
+
       var tokenSpan = document.createElement("span");
       tokenSpan.classList.add(token.type);
 
@@ -70,7 +80,7 @@
           leftBracketSpan.classList.add("bracket");
           if (token.error) {
             leftBracketSpan.classList.add("error");
-            leftBracketSpan.title = token.error;
+            leftBracketSpan.title = errorMessages.get(token.error);
             handledError = true;
           } else {
             tokenSpan.classList.add("group");
@@ -157,7 +167,7 @@
 
       if (token.error && !handledError) {
         tokenSpan.classList.add("error");
-        tokenSpan.title = token.error;
+        tokenSpan.title = errorMessages.get(token.error);
       }
 
       parent.appendChild(tokenSpan);
