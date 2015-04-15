@@ -198,6 +198,7 @@
       }
 
       if (parentToken.type === "Range" && parentToken.right &&
+          parentToken.left.value && parentToken.right.value &&
           parentToken.left.value.charCodeAt(0) > parentToken.right.value.charCodeAt(0)) {
         parentToken.error = "invalidCharRange";
       }
