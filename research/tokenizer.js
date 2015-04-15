@@ -82,7 +82,7 @@
 
         stack.push(parentToken);
         newParentToken = currentToken;
-      } else if (char === "[") {
+      } else if (char === "[" && !charClass) {
         let negated = (str[i + 1] === "^");
         charClass = true;
         currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1),
