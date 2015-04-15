@@ -149,21 +149,22 @@
               '"end":4}}],"loc":{"start":0,"end":5}}],"loc":{"start":0,"end":5}}'
         },
         {
-          name: "Dash at the beginning or end of a character class",
-          regExp: "[-a][^-a][a-]",
+          name: "Dash at the beginning, middle or end of a character class",
+          regExp: "[-a][^-a][a-d-g][a-]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
-              '"negated":false,"body":[{"type":"Literal","value":"-",' +
-              '"loc":{"start":1,"end":2}},{"type":"Literal","value":"a",' +
-              '"loc":{"start":2,"end":3}}],"loc":{"start":0,' +
-              '"end":4}},{"type":"CharacterClass",' +
-              '"negated":true,"body":[{"type":"Literal","value":"-",' +
-              '"loc":{"start":6,"end":7}},{"type":"Literal","value":"a",' +
-              '"loc":{"start":7,"end":8}}],"loc":{"start":4,' +
-              '"end":9}},{"type":"CharacterClass",' +
-              '"negated":false,"body":[{"type":"Literal","value":"a",' +
-              '"loc":{"start":10,"end":11}},{"type":"Literal","value":"-",' +
-              '"loc":{"start":11,"end":12}}],"loc":{"start":9,' +
-              '"end":13}}],"loc":{"start":0,"end":13}}'
+              '"negated":false,"body":[{"type":"Literal","value":"-","loc":{"start":1,' +
+              '"end":2}},{"type":"Literal","value":"a","loc":{"start":2,"end":3}}],"loc":' +
+              '{"start":0,"end":4}},{"type":"CharacterClass","negated":true,"body":[{"type":' +
+              '"Literal","value":"-","loc":{"start":6,"end":7}},{"type":"Literal","value":"a",' +
+              '"loc":{"start":7,"end":8}}],"loc":{"start":4,"end":9}},{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Range","left":{"type":"Literal","value":"a",' +
+              '"loc":{"start":10,"end":11}},"right":{"type":"Literal","value":"d","loc":' +
+              '{"start":12,"end":13}},"loc":{"start":10,"end":13}},{"type":"Literal",' +
+              '"value":"-","loc":{"start":13,"end":14}},{"type":"Literal","value":"g","loc":' +
+              '{"start":14,"end":15}},{"type":"CharacterClass","negated":false,"body":[{"type":' +
+              '"Literal","value":"a","loc":{"start":17,"end":18}},{"type":"Literal","value":"-",' +
+              '"loc":{"start":18,"end":19}}],"loc":{"start":16,"end":20}}],"loc":{"start":0,' +
+              '"end":20}}'
         },
         {
           name: "Quantifiers",
