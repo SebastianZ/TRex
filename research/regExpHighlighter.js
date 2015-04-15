@@ -5,19 +5,65 @@
   let prototype = RegExpHighlighter.prototype;
 
   prototype.highlight = function(token) {
+    let brackets = new Map([
+      ["CapturingGroup", {
+        opening: "(",
+        closing: ")"
+      }],
+      ["NonCapturingGroup", {
+        opening: "(?:",
+        closing: ")"
+      }],
+      ["PositiveLookAhead", {
+        opening: "(?=",
+        closing: ")"
+      }],
+      ["NegativeLookAhead", {
+        opening: "(?!",
+        closing: ")"
+      }],
+      ["PositiveLookBehind", {
+        opening: "(?<=",
+        closing: ")"
+      }],
+      ["NegativeLookBehind", {
+        opening: "(?<!",
+        closing: ")"
+      }],
+      ["CharacterClass", {
+        opening: "[",
+        closing: "]"
+      }],
+    ]);
+
+    var prefix = new Map([
+      ["HexEscapeSequence", "x"],
+      ["UnicodeEscapeSequence", "u"],
+      ["ControlLetterEscape", "c"]
+    ]);
+
+    var tokenOutput = new Map([
+       ["StartAnchor", "^"],
+       ["EndAnchor", "$"],
+       ["AnyCharacter", "."],
+       ["OptionalQuantifier", "?"],
+       ["ZeroOrMoreQuantifier", "*"],
+       ["OneOrMoreQuantifier", "+"]
+     ]);
+
+    var errorMessages = new Map([
+      ["noClosingBracket", "Unmatched opening bracket."],
+      ["additionalClosingBracket", "Unmatched closing bracket."],
+      ["unescapedSlash", "Unescasped forward slash."],
+      ["invalidCharRange", "Range values reversed. Start character is greater than end character."],
+      ["lookbehind", "Lookbehinds not supported in JavaScript."],
+      ["invalidRepetitionRange", "Quantifier minimum is greater than maximum."],
+      ["danglingBackslash", "Dangling backslash."],
+      ["invalidQuantifierTarget", "Invalid target for quantifier."]
+    ]);
+
     function outputToken(parent, token) {
       var handledError = false;
-
-      var errorMessages = new Map();
-      errorMessages.set("noClosingBracket", "Unmatched opening bracket.");
-      errorMessages.set("additionalClosingBracket", "Unmatched closing bracket.");
-      errorMessages.set("unescapedSlash", "Unescasped forward slash.");
-      errorMessages.set("invalidCharRange", "Range values reversed. Start character is greater than end character.");
-      errorMessages.set("lookbehind", "Lookbehinds not supported in JavaScript.");
-      errorMessages.set("invalidRepetitionRange", "Quantifier minimum is greater than maximum.");
-      errorMessages.set("danglingBackslash", "Dangling backslash.");
-      errorMessages.set("invalidQuantifierTarget", "Invalid target for quantifier.");
-
       var tokenSpan = document.createElement("span");
       tokenSpan.classList.add(token.type);
 
@@ -44,38 +90,7 @@
         case "PositiveLookBehind":
         case "NegativeLookBehind":
         case "CharacterClass":
-          let brackets = {
-            "CapturingGroup": {
-              opening: "(",
-              closing: ")"
-            },
-            "NonCapturingGroup": {
-              opening: "(?:",
-              closing: ")"
-            },
-            "PositiveLookAhead": {
-              opening: "(?=",
-              closing: ")"
-            },
-            "NegativeLookAhead": {
-              opening: "(?!",
-              closing: ")"
-            },
-            "PositiveLookBehind": {
-              opening: "(?<=",
-              closing: ")"
-            },
-            "NegativeLookBehind": {
-              opening: "(?<!",
-              closing: ")"
-            },
-            "CharacterClass": {
-              opening: "[",
-              closing: "]"
-            }
-          }
-
-          var groupBrackets = brackets[token.type];
+          var groupBrackets = brackets.get(token.type);
           var leftBracketSpan = document.createElement("span");
           leftBracketSpan.classList.add("bracket");
           if (token.error) {
@@ -110,12 +125,7 @@
         case "ControlLetterEscape":
         case "HexEscapeSequence":
         case "UnicodeEscapeSequence":
-          var prefix = {
-            "HexEscapeSequence": "x",
-            "UnicodeEscapeSequence": "u",
-            "ControlLetterEscape": "c"
-          }
-          tokenSpan.textContent = "\\" + (prefix[token.type] || "") +
+          tokenSpan.textContent = "\\" + (prefix.get(token.type) || "") +
               (token.char || token.sequence || "");
           break;
 
@@ -125,15 +135,7 @@
         case "OptionalQuantifier":
         case "ZeroOrMoreQuantifier":
         case "OneOrMoreQuantifier":
-          var tokenOutput = {
-            "StartAnchor": "^",
-            "EndAnchor": "$",
-            "AnyCharacter": ".",
-            "OptionalQuantifier": "?",
-            "ZeroOrMoreQuantifier": "*",
-            "OneOrMoreQuantifier": "+"
-          };
-          tokenSpan.textContent = tokenOutput[token.type] + (token.lazy ? "?" : "");
+          tokenSpan.textContent = tokenOutput.get(token.type) + (token.lazy ? "?" : "");
           break;
 
         case "FixedRepetitionQuantifier":
