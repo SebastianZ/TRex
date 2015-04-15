@@ -13,22 +13,87 @@
       return tokenizedRegExp;
     }
 
-    function highlight() {
-      let regExp = tokenize(document.getElementById("regExp").value);
-      let regExpHighlighter = document.getElementById("regExpHighlighter");
-      regExpHighlighter.textContent = "";
+    function getSelectionOffset() {
+      var selectionRange = window.getSelection();
 
-      regExpHighlighter.appendChild(highlighter.highlight(regExp));
+      var parent = selectionRange.anchorNode;
+      while (parent !== document.documentElement && parent.id !== "regExp") {
+        parent = parent.parentElement;
+      }
+
+      if (parent === document.documentElement) {
+        return 0;
+      }
+
+      var offset = selectionRange.anchorOffset;
+
+      var node = selectionRange.anchorNode;
+      while(node && node.id !== "regExp") {
+        if (node.previousSibling) {
+          node = node.previousSibling;
+          offset += node.textContent.length;
+        } else {
+          node = node.parentElement;
+        }
+      }
+
+      return offset;
+    }
+
+    function getRangeBySelectionOffset(offset) {
+      var node = document.getElementById("regExp");
+      var anchorOffset = offset;
+      while (node) {
+        var contentLength = node.textContent.length;
+        if (contentLength < anchorOffset) {
+          anchorOffset -= contentLength;
+          if (!node.nextElementSibling) {
+            break;
+          }
+          node = node.nextElementSibling;
+        } else {
+          if (!node.firstElementChild) {
+            break;
+          }
+          node = node.firstElementChild;
+        }
+      }
+
+      if (node.firstChild) {
+        node = node.firstChild;
+      }
+
+      var range = document.createRange();
+      range.setStart(node, anchorOffset);
+      range.setEnd(node, anchorOffset);
+
+      return range;
+    }
+
+    function highlight() {
+      var regExpField = document.getElementById("regExp");
+      var regExp = tokenize(regExpField.textContent);
+
+      var selectionOffset = getSelectionOffset();
+      regExpField.textContent = "";
+      regExpField.appendChild(highlighter.highlight(regExp));
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      var range = getRangeBySelectionOffset(selectionOffset);
+      selection.addRange(range);
     }
 
     var tokenizer = new RegExpTokenizer();
     var highlighter = new RegExpHighlighter();
 
     window.addEventListener("DOMContentLoaded", function onLoad() {
+      var regExp = document.getElementById("regExp");
+      regExp.contentEditable = true;
+
       highlight();
 
       var regExpField = document.getElementById("regExp");
-      regExpField.addEventListener("keyup", function onRegExpFieldKeyDown(evt) {
+      regExpField.addEventListener("input", function onRegExpFieldKeyDown(evt) {
         var ignoredKeyCodes = [
           KeyEvent.DOM_VK_LEFT,
           KeyEvent.DOM_VK_RIGHT,
@@ -61,7 +126,6 @@
     </script>
   </head>
   <body>
-    <textarea id="regExp" cols="100" rows="1">a(b|c)</textarea>
-    <div id="regExpHighlighter"></div>
+    <div id="regExp">a(b|c)</div>
   </body>
 </html>
