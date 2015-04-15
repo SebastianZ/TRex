@@ -300,7 +300,7 @@
       case "ControlEscape":
       case "IdentityEscape":
       case "CharacterClassEscape":
-        token.char = str[token.loc.end];
+        token.char = str[token.loc.end] || "";
         if (token.type === "ControlEscape") {
           token.value = RegExpTokenizer.ESCACPE_CHAR_CODES[token.char];
         }
