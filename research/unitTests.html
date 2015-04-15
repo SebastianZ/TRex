@@ -114,6 +114,23 @@
               '"end":16}}],"loc":{"start":11,"end":17}}],"loc":{"start":0,"end":17}}'
         },
         {
+          name: "Dash at the beginning or end of a character class",
+          regExp: "[-a][^-a][a-]",
+          expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Literal","value":"-",' +
+              '"loc":{"start":1,"end":2}},{"type":"Literal","value":"a",' +
+              '"loc":{"start":2,"end":3}}],"loc":{"start":0,' +
+              '"end":4}},{"type":"CharacterClass",' +
+              '"negated":true,"body":[{"type":"Literal","value":"-",' +
+              '"loc":{"start":6,"end":7}},{"type":"Literal","value":"a",' +
+              '"loc":{"start":7,"end":8}}],"loc":{"start":4,' +
+              '"end":9}},{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Literal","value":"a",' +
+              '"loc":{"start":10,"end":11}},{"type":"Literal","value":"-",' +
+              '"loc":{"start":11,"end":12}}],"loc":{"start":9,' +
+              '"end":13}}],"loc":{"start":0,"end":13}}'
+        },
+        {
           name: "Quantifiers",
           regExp: "a*b+c??",
           expected: '{"type":"RegularExpression","body":[{"type":"Literal","value":"a","loc":' +
