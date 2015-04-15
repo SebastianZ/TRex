@@ -134,6 +134,12 @@
               '"end":4}}],"loc":{"start":0,"end":5}}],"loc":{"start":0,"end":5}}'
         },
         {
+          name: "No closing bracket of character class",
+          regExp: "]",
+          expected: '{"type":"RegularExpression","body":[{"type":"Literal","value":"]","loc":' +
+              '{"start":0,"end":1}}],"loc":{"start":0,"end":1}}'
+        },
+        {
           name: "No quantifiers within character class",
           regExp: "[?+*]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
