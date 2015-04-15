@@ -2,8 +2,7 @@ body {
   position: relative;
 }
 
-#regExp,
-#regExpHighlighter {
+#regExp {
   position: relative;
   top: 0;
   left: 0;
@@ -11,16 +10,9 @@ body {
   width: 500px;
   height: 10em;
   border: 1px solid gray;
-  line-height: 1em;
+  line-height: 1.3em;
   padding: 5px;
   font-family: monospace;
-}
-
-#regExp {
-  resize: none;
-}
-
-#regExpHighlighter {
   overflow-y: auto;
   word-wrap: break-word;
 }
