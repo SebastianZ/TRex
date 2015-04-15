@@ -134,6 +134,15 @@
               '"end":4}}],"loc":{"start":0,"end":5}}],"loc":{"start":0,"end":5}}'
         },
         {
+          name: "No quantifiers within character class",
+          regExp: "[?+*]",
+          expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
+              '"negated":false,"body":[{"type":"Literal","value":"?","loc":{"start":1,' +
+              '"end":2}},{"type":"Literal","value":"+","loc":{"start":2,' +
+              '"end":3}},{"type":"Literal","value":"*","loc":{"start":3,' +
+              '"end":4}}],"loc":{"start":0,"end":5}}],"loc":{"start":0,"end":5}}'
+        },
+        {
           name: "Dash at the beginning or end of a character class",
           regExp: "[-a][^-a][a-]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
