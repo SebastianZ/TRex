@@ -114,11 +114,16 @@
               '"end":16}}],"loc":{"start":11,"end":17}}],"loc":{"start":0,"end":17}}'
         },
         {
-          name: "No nested character class",
-          regExp: "[[]",
+          name: "No group, character class or repetition quantifier within character class",
+          regExp: "[[(){1}]",
           expected: '{"type":"RegularExpression","body":[{"type":"CharacterClass",' +
               '"negated":false,"body":[{"type":"Literal","value":"[","loc":{"start":1,' +
-              '"end":2}}],"loc":{"start":0,"end":3}}],"loc":{"start":0,"end":3}}'
+              '"end":2}},{"type":"Literal","value":"(","loc":{"start":2,' +
+              '"end":3}},{"type":"Literal","value":")","loc":{"start":3,' +
+              '"end":4}},{"type":"Literal","value":"{","loc":{"start":4,' +
+              '"end":5}},{"type":"Literal","value":"1","loc":{"start":5,' +
+              '"end":6}},{"type":"Literal","value":"}","loc":{"start":6,' +
+              '"end":7}}],"loc":{"start":0,"end":8}}],"loc":{"start":0,"end":8}}'
         },
         {
           name: "Dash at the beginning or end of a character class",
