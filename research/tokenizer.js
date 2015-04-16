@@ -90,9 +90,9 @@
         stack.push(parentToken);
 
         newParentToken = currentToken;
-      } else if (char === "-" && charClass && str[i + 1] !== undefined &&
-          str[i - 1] !== "[" && !(str[i - 1] === "^" && str[i - 2] === "[") &&
-          str[i + 1] !== "]") {
+      } else if (char === "-" && charClass && currentToken.type !== "Range" &&
+          str[i + 1] !== undefined && str[i - 1] !== "[" && !(str[i - 1] === "^" &&
+          str[i - 2] === "[") && str[i + 1] !== "]") {
         currentToken = new token("Range", currentToken.loc.start, i + 1,
             {left: currentToken, right: null});
         let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
@@ -197,10 +197,15 @@
         }
       }
 
-      if (parentToken.type === "Range" && parentToken.right &&
-          parentToken.left.value && parentToken.right.value &&
-          parentToken.left.value.charCodeAt(0) > parentToken.right.value.charCodeAt(0)) {
-        parentToken.error = "invalidCharRange";
+      if (parentToken.type === "Range" && parentToken.right) {
+        // Make the character range the current token, as it is complete now,
+        // so following characters can check for it
+        currentToken = parentToken;
+
+        if (parentToken.left.value && parentToken.right.value &&
+            parentToken.left.value.charCodeAt(0) > parentToken.right.value.charCodeAt(0)) {
+          parentToken.error = "invalidCharRange";
+        }
       }
 
       if (newParentToken) {
