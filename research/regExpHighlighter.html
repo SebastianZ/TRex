@@ -40,7 +40,7 @@
       return offset;
     }
 
-    function getRangeBySelectionOffset(offset) {
+    function getRangeByOffset(offset) {
       var node = document.getElementById("regExp");
       var anchorOffset = offset;
       while (node) {
@@ -79,7 +79,7 @@
       regExpField.appendChild(highlighter.highlight(regExp));
       var selection = window.getSelection();
       selection.removeAllRanges();
-      var range = getRangeBySelectionOffset(selectionOffset);
+      var range = getRangeByOffset(selectionOffset);
       selection.addRange(range);
     }
 
@@ -94,7 +94,7 @@
 
       var regExpField = document.getElementById("regExp");
       regExpField.addEventListener("input", function onRegExpFieldKeyDown(evt) {
-        var ignoredKeyCodes = [
+        var ignoredKeyCodes = new Set([
           KeyEvent.DOM_VK_LEFT,
           KeyEvent.DOM_VK_RIGHT,
           KeyEvent.DOM_VK_UP,
@@ -116,10 +116,61 @@
           KeyEvent.DOM_VK_NUM_LOCK,
           KeyEvent.DOM_VK_PAUSE,
           KeyEvent.DOM_VK_PRINTSCREEN
-        ];
+        ]);
 
-        if (ignoredKeyCodes.indexOf(evt.keyCode) === -1) {
+        if (!ignoredKeyCodes.has(evt.keyCode)) {
           highlight();
+        }
+      });
+
+      function highlightGroup() {
+        var highlightedGroup = document.getElementsByClassName("highlighted");
+        if (highlightedGroup.length > 0) {
+          highlightedGroup[0].classList.remove("highlighted");
+        }
+
+        var selection = window.getSelection();
+        var selectedElement = selection.anchorNode.parentElement;
+        var highlightedGroup = null;
+        if (selectedElement.classList.contains("bracket") && selection.anchorOffset === 1) {
+          highlightedGroup = selectedElement.parentElement;
+        } else if (selectedElement.previousElementSibling &&
+            selectedElement.previousElementSibling.classList.contains("group") &&
+            selection.anchorOffset === 0) {
+          highlightedGroup = selectedElement.previousElementSibling;
+        } else if (selection.anchorOffset === 0 && !selectedElement.classList.contains("Range")) {
+          var element = selectedElement;
+          while (!element.previousElementSibling &&
+              (element.parentElement.classList.contains("Alternation") ||
+                  element.parentElement.classList.contains("Range"))) {
+            element = element.parentElement;
+          }
+
+          if (element.previousElementSibling && element.previousElementSibling.classList.contains("bracket")) {
+            highlightedGroup = element.parentElement;
+          }
+        }
+
+        if (highlightedGroup) {
+          highlightedGroup.classList.add("highlighted");
+        }
+      }
+
+      regExpField.addEventListener("mouseup", highlightGroup);
+      regExpField.addEventListener("keyup", function onRegExpFieldKeyUp(evt) {
+        var navigationKeys = new Set([
+          KeyEvent.DOM_VK_LEFT,
+          KeyEvent.DOM_VK_RIGHT,
+          KeyEvent.DOM_VK_UP,
+          KeyEvent.DOM_VK_DOWN,
+          KeyEvent.DOM_VK_PAGE_UP,
+          KeyEvent.DOM_VK_PAGE_DOWN,
+          KeyEvent.DOM_VK_HOME,
+          KeyEvent.DOM_VK_END
+        ]);
+
+        if (navigationKeys.has(evt.keyCode)) {
+          highlightGroup();
         }
       });
     });
