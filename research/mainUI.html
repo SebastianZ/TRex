@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>trex</title>
+    <link href="mainUI.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="main">
+        <div class="top-bar">
+            <ul class="top-menu">
+                <li>
+                Flags
+                    <div class="bubble-box">
+                        <div class="arrow"></div>
+                        <div class="main-box">
+                            <ul class="menu">
+                                <li>
+                                    <input type="checkbox"  /> ignore case
+                                </li>
+                                <li>
+                                    <input type="checkbox" /> multiline
+                                </li>
+                                <li>
+                                    <input type="checkbox" /> global
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="middle-bar">
+            Expression:
+            <span class="slash">/</span> <input type="text" class="pattern" /> <span class="slash">/</span>
+        </div>
+        <div class="bottom-bar">
+            <textarea rows="20" ></textarea>
+        </div>
+    </div>
+</body>
+</html>
