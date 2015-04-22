@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Match highlighter</title>
+    <link href="matchHighlighter.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript;version=1.8" src="matchHighlighter.js"></script>
+    <script type="application/javascript;version=1.8">
+    function getSelectionOffset() {
+      var selectionRange = window.getSelection();
+
+      var parent = selectionRange.anchorNode;
+      while (parent !== document.documentElement && parent.id !== "searchText") {
+        parent = parent.parentElement;
+      }
+
+      if (parent === document.documentElement) {
+        return 0;
+      }
+
+      var offset = selectionRange.anchorOffset;
+
+      var node = selectionRange.anchorNode;
+      while(node && node.id !== "searchText") {
+        if (node.previousSibling) {
+          node = node.previousSibling;
+          offset += node.textContent.length;
+        } else {
+          node = node.parentElement;
+        }
+      }
+
+      return offset;
+    }
+
+    function getRangeByOffset(offset) {
+      var node = document.getElementById("searchText");
+      var anchorOffset = offset;
+      while (node) {
+        var contentLength = node.textContent.length;
+        if (contentLength < anchorOffset) {
+          anchorOffset -= contentLength;
+          if (!node.nextElementSibling) {
+            break;
+          }
+          node = node.nextElementSibling;
+        } else {
+          if ((node.firstChild.nodeType === Node.TEXT_NODE &&
+              node.firstChild.textContent.length >= anchorOffset) || !node.firstElementChild) {
+            break;
+          }
+          node = node.firstElementChild;
+        }
+      }
+
+      if (node.firstChild) {
+        node = node.firstChild;
+      }
+
+      var range = document.createRange();
+      range.setStart(node, anchorOffset);
+      range.setEnd(node, anchorOffset);
+
+      return range;
+    }
+
+    function highlight() {
+      var searchTextField = document.getElementById("searchText");
+      var matches = [
+        {
+          start: 3,
+          end: 8
+        },
+        {
+          start: 14,
+          end: 15
+        }
+      ];
+
+      var selectionOffset = getSelectionOffset();
+      var searchText = searchTextField.textContent;
+      searchTextField.textContent = "";
+      searchTextField.appendChild(highlighter.highlight(searchText, matches));
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      var range = getRangeByOffset(selectionOffset);
+      selection.addRange(range);
+    }
+
+    var highlighter = new MatchHighlighter();
+
+    window.addEventListener("DOMContentLoaded", function onLoad() {
+      var searchText = document.getElementById("searchText");
+      searchText.contentEditable = true;
+
+      highlight();
+
+      var searchTextField = document.getElementById("searchText");
+      searchTextField.addEventListener("input", function onSearchTextFieldInput(evt) {
+        var ignoredKeyCodes = new Set([
+          KeyEvent.DOM_VK_LEFT,
+          KeyEvent.DOM_VK_RIGHT,
+          KeyEvent.DOM_VK_UP,
+          KeyEvent.DOM_VK_DOWN,
+          KeyEvent.DOM_VK_CONTROL,
+          KeyEvent.DOM_VK_ALT,
+          KeyEvent.DOM_VK_ALTGR,
+          KeyEvent.DOM_VK_META,
+          KeyEvent.DOM_VK_SHIFT,
+          KeyEvent.DOM_VK_CAPS_LOCK,
+          KeyEvent.DOM_VK_TAB,
+          KeyEvent.DOM_VK_RETURN,
+          KeyEvent.DOM_VK_CONTEXT_MENU,
+          KeyEvent.DOM_VK_ESCAPE,
+          KeyEvent.DOM_VK_HOME,
+          KeyEvent.DOM_VK_END,
+          KeyEvent.DOM_VK_PAGE_UP,
+          KeyEvent.DOM_VK_PAGE_DOWN,
+          KeyEvent.DOM_VK_NUM_LOCK,
+          KeyEvent.DOM_VK_PAUSE,
+          KeyEvent.DOM_VK_PRINTSCREEN
+        ]);
+
+        if (!ignoredKeyCodes.has(evt.keyCode)) {
+          highlight();
+        }
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <div id="searchText">abcdefghijklmnopqrstuvwxyz</div>
+  </body>
+</html>
