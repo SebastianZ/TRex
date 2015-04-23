@@ -38,23 +38,16 @@
       var anchorOffset = offset;
       while (node) {
         var contentLength = node.textContent.length;
-        if (contentLength < anchorOffset) {
-          anchorOffset -= contentLength;
-          if (!node.nextElementSibling) {
+        if (contentLength >= anchorOffset) {
+          if (node.nodeType === Node.TEXT_NODE) {
             break;
+          } else {
+            node = node.firstChild;
           }
-          node = node.nextElementSibling;
         } else {
-          if ((node.firstChild.nodeType === Node.TEXT_NODE &&
-              node.firstChild.textContent.length >= anchorOffset) || !node.firstElementChild) {
-            break;
-          }
-          node = node.firstElementChild;
+          anchorOffset -= contentLength;
+          node = node.nextSibling;
         }
-      }
-
-      if (node.firstChild) {
-        node = node.firstChild;
       }
 
       var range = document.createRange();
