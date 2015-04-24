@@ -139,7 +139,7 @@
         }
       } else if (char === "." && !charClass) {
         currentToken = new token("AnyCharacter", i);
-      } else if ("?*+{".contains(char) && !charClass) {
+      } else if ("?*+{".indexOf(char) !== -1 && !charClass) {
         var quantifierToken = new token("", i);
         this.parseQuantifier(str, quantifierToken);
         if (quantifierToken.type === "") {
@@ -233,13 +233,13 @@
   prototype.parseGroup = function(str, token) {
     var match = str.substr(token.loc.start + 1, 3).match(/\?(?::|<?[!=])/);
     if (match) {
-      if (match[0].contains(":")) {
+      if (match[0].indexOf(":") !== -1) {
         token.type = "NonCapturingGroup";
       } else {
-        token.type = match[0].contains("=") ? "Positive" : "Negative";
-        token.type += "Look" + (match[0].contains("<") ? "Behind" : "Ahead");
+        token.type = match[0].indexOf("=") !== -1 ? "Positive" : "Negative";
+        token.type += "Look" + (match[0].indexOf("<") !== -1 ? "Behind" : "Ahead");
 
-        if (match[0].contains("<"))
+        if (match[0].indexOf("<") !== -1)
           token.error = "lookbehind";
       }
 
