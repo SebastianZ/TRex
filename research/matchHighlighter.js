@@ -1,10 +1,13 @@
 (function () {
   "use strict";
 
-  let MatchHighlighter = function() { };
+  let MatchHighlighter = function () {
+  };
+  MatchHighlighter.prototype = new Highlighter("searchText");
+  MatchHighlighter.prototype.constructor = MatchHighlighter;
   let prototype = MatchHighlighter.prototype;
 
-  prototype.highlight = function(searchText, matches) {
+  prototype.highlightMatches = function(searchText, matches) {
     var highlightedSearchText = new DocumentFragment();
     var previousMatchEnd = 0;
     matches.forEach(function highlightMatches(match) {
@@ -25,6 +28,28 @@
     }
     return highlightedSearchText;
   };
+
+  prototype.highlight = function() {
+    var matches = [
+      {
+        start: 3,
+        end: 8
+      },
+      {
+        start: 14,
+        end: 15
+      }
+    ];
+
+    var selectionOffset = this.getSelectionOffset(this.field);
+    var searchText = this.field.textContent;
+    this.field.textContent = "";
+    this.field.appendChild(this.highlightMatches(searchText, matches));
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    var range = this.getRangeByOffset(this.field, selectionOffset);
+    selection.addRange(range);
+  }
 
   window.MatchHighlighter = MatchHighlighter;
 })();
