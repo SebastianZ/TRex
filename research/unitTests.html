@@ -33,8 +33,8 @@
       background-color: #ffb4b4;
     }
     </style>
-    <script type="application/javascript;version=1.8" src="tokenizer.js"></script>
-    <script type="application/javascript;version=1.8">
+    <script type="application/javascript" src="tokenizer.js"></script>
+    <script type="application/javascript">
     function highlightDifference(string1, string2) {
       for(var i = 0; i < string2.length; i++) {
         if (string1[i] !== string2[i]) {
@@ -47,7 +47,7 @@
     }
 
     function runTests() {
-      let tests = [
+      var tests = [
         {
           name: "Literal",
           regExp: "abc",
@@ -371,34 +371,34 @@
         }
       ];
 
-      let tokenizer = new RegExpTokenizer();
-      let tbody = document.querySelector("tbody");
+      var tokenizer = new RegExpTokenizer();
+      var tbody = document.querySelector("tbody");
       tests.forEach((test) => {
-        let result = '';
+        var result = '';
         try {
           result = tokenizer.tokenize(test.regExp);
         } catch(e) {
           result = e;
         }
-        let stringifiedResult = JSON.stringify(result);
-        let testOK = (stringifiedResult === test.expected);
+        var stringifiedResult = JSON.stringify(result);
+        var testOK = (stringifiedResult === test.expected);
 
-        let tr = document.createElement("tr");
+        var tr = document.createElement("tr");
 
-        let tdName = document.createElement("td");
+        var tdName = document.createElement("td");
         tdName.textContent = test.name;
 
-        let tdRegExp = document.createElement("td");
-        let code = document.createElement("code")
+        var tdRegExp = document.createElement("td");
+        var code = document.createElement("code")
         code.textContent = test.regExp;
         tdRegExp.appendChild(code);
 
-        let tdResult = document.createElement("td");
+        var tdResult = document.createElement("td");
         tdResult.textContent = (testOK ? "OK" : "FAILED");
 
-        let tdDetails = document.createElement("td");
+        var tdDetails = document.createElement("td");
         if (!testOK) {
-          let details = "";
+          var details = "";
           if (result instanceof Error) {
             details += "<strong>Exception:</strong><br/>" + result;
             if (result.lineNumber !== 0) {

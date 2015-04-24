@@ -1,11 +1,11 @@
 (function () {
   "use strict";
 
-  let MatchHighlighter = function () {
+  var MatchHighlighter = function () {
   };
   MatchHighlighter.prototype = new Highlighter("searchText");
   MatchHighlighter.prototype.constructor = MatchHighlighter;
-  let prototype = MatchHighlighter.prototype;
+  var prototype = MatchHighlighter.prototype;
 
   prototype.highlightMatches = function(searchText, matches) {
     var highlightedSearchText = new DocumentFragment();

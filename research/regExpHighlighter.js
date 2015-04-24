@@ -3,7 +3,7 @@
 
   var tokenizer = new RegExpTokenizer();
 
-  let RegExpHighlighter = function (fieldID) {
+  var RegExpHighlighter = function (fieldID) {
     var self = this;
     window.addEventListener("DOMContentLoaded", function () {
       self.field.addEventListener("input", function onRegExpFieldInput(evt) {
@@ -33,7 +33,7 @@
   };
   RegExpHighlighter.prototype = new Highlighter("regExp");
   RegExpHighlighter.prototype.constructor = RegExpHighlighter;
-  let prototype = RegExpHighlighter.prototype;
+  var prototype = RegExpHighlighter.prototype;
 
   prototype.tokenize = function(regExp) {
     this.tokenizedRegExp = tokenizer.tokenize(regExp);
@@ -42,7 +42,7 @@
   };
 
   prototype.highlightRegExp = function(token) {
-    let brackets = new Map([
+    var brackets = new Map([
       ["CapturingGroup", {
         opening: "(",
         closing: ")"
@@ -212,7 +212,7 @@
       parent.appendChild(tokenSpan);
     }
 
-    let highlightedRegExp = new DocumentFragment();
+    var highlightedRegExp = new DocumentFragment();
     outputToken(highlightedRegExp, token);
 
     return highlightedRegExp;

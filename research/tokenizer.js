@@ -1,8 +1,8 @@
 (function () {
   "use strict";
 
-  let RegExpTokenizer = function() { };
-  let prototype = RegExpTokenizer.prototype;
+  var RegExpTokenizer = function() { };
+  var prototype = RegExpTokenizer.prototype;
 
   RegExpTokenizer.ESCAPE_CHAR_TYPES = [
     "ControlEscape",
@@ -46,7 +46,7 @@
     function token(type, start, end, additionalProps) {
       this.type = type;
       if (additionalProps) {
-        let self = this;
+        var self = this;
         Object.getOwnPropertyNames(additionalProps).forEach(function mapPropNames(name) {
           self[name] = additionalProps[name];
         });
@@ -60,17 +60,17 @@
     this.token = null;
     this.capturingGroups = [];
 
-    let length = str.length;
-    let i = 0;
-    let ast = new token("RegularExpression", i, length, {body: []});
-    let parentToken = ast;
-    let currentToken = ast;
-    let stack = [];
-    let charClass = false;
+    var length = str.length;
+    var i = 0;
+    var ast = new token("RegularExpression", i, length, {body: []});
+    var parentToken = ast;
+    var currentToken = ast;
+    var stack = [];
+    var charClass = false;
     while (i < length) {
-      let char = str.charAt(i);
-      let addToParent = true;
-      let newParentToken = null;
+      var char = str.charAt(i);
+      var addToParent = true;
+      var newParentToken = null;
 
       if (char === "(" && !charClass) {
         currentToken = new token("", i, null, {error: "noClosingBracket", body: []});
@@ -83,7 +83,7 @@
         stack.push(parentToken);
         newParentToken = currentToken;
       } else if (char === "[" && !charClass) {
-        let negated = (str[i + 1] === "^");
+        var negated = (str[i + 1] === "^");
         charClass = true;
         currentToken = new token("CharacterClass", i, i + (negated ? 2 : 1),
             {negated: negated, error: "noClosingBracket", body: []});
@@ -95,7 +95,7 @@
           str[i - 2] === "[") && str[i + 1] !== "]") {
         currentToken = new token("Range", currentToken.loc.start, i + 1,
             {left: currentToken, right: null});
-        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        var parent = parentToken.hasOwnProperty("right") ? "right" : "body";
         parentToken[parent].pop();
         stack.push(parentToken);
         newParentToken = currentToken;
@@ -112,7 +112,7 @@
             parentToken = stack.pop();
           }
 
-          let stackToken = stack.pop();
+          var stackToken = stack.pop();
           currentToken = parentToken;
           if (currentToken.error === "noClosingBracket")
             delete currentToken.error;
@@ -124,7 +124,7 @@
               error: "additionalClosingBracket"});
         }
       } else if (char === "\\") {
-        let escapeSequenceToken = new token("", i);
+        var escapeSequenceToken = new token("", i);
         if (this.parseEscapeSequence(str, escapeSequenceToken)) {
           currentToken = escapeSequenceToken;
         } else {
@@ -140,7 +140,7 @@
       } else if (char === "." && !charClass) {
         currentToken = new token("AnyCharacter", i);
       } else if ("?*+{".contains(char) && !charClass) {
-        let quantifierToken = new token("", i);
+        var quantifierToken = new token("", i);
         this.parseQuantifier(str, quantifierToken);
         if (quantifierToken.type === "") {
           if (currentToken && currentToken.type === "Literal" && !currentToken.error) {
@@ -163,8 +163,8 @@
       } else if ((char === "^" || char === "$") && !charClass) {
         currentToken = new token((char === "^" ? "Start" : "End") + "Anchor", i);
       } else if (char === "|" && !charClass) {
-        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
-        let startLoc = parentToken[parent][0] ? parentToken[parent][0].loc.start : i;
+        var parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        var startLoc = parentToken[parent][0] ? parentToken[parent][0].loc.start : i;
         currentToken = new token("Alternation", startLoc, i + 1,
             {left: parentToken[parent], right: []});
         parentToken[parent] = [];
@@ -189,7 +189,7 @@
       }
 
       if (addToParent) {
-        let parent = parentToken.hasOwnProperty("right") ? "right" : "body";
+        var parent = parentToken.hasOwnProperty("right") ? "right" : "body";
         if (Array.isArray(parentToken[parent])) {
           parentToken[parent].push(currentToken);
         } else {
@@ -231,7 +231,7 @@
   };
 
   prototype.parseGroup = function(str, token) {
-    let match = str.substr(token.loc.start + 1, 3).match(/\?(?::|<?[!=])/);
+    var match = str.substr(token.loc.start + 1, 3).match(/\?(?::|<?[!=])/);
     if (match) {
       if (match[0].contains(":")) {
         token.type = "NonCapturingGroup";
@@ -264,7 +264,7 @@
         break;
 
       case "{":
-        let repetitions = str.substr(token.loc.start).match(/^\{(\d*)(?:,(\d*))?\}/);
+        var repetitions = str.substr(token.loc.start).match(/^\{(\d*)(?:,(\d*))?\}/);
 
         // If no repetition is found, the following characters are parsed normally without error
         if (!repetitions || (!repetitions[1] && !repetitions[2])) {
@@ -297,7 +297,7 @@
   };
 
   prototype.parseEscapeSequence = function(str, token) {
-    let escapeCharType = RegExpTokenizer.ESCAPE_CHARS[str[token.loc.end]];
+    var escapeCharType = RegExpTokenizer.ESCAPE_CHARS[str[token.loc.end]];
     if (escapeCharType === undefined)
       escapeCharType = 4;
     token.type = RegExpTokenizer.ESCAPE_CHAR_TYPES[escapeCharType];
@@ -329,7 +329,7 @@
         break;
 
       case "HexEscapeSequence": {
-          let sequence = str.substr(token.loc.end + 1, 2);
+          var sequence = str.substr(token.loc.end + 1, 2);
   
           // Only if the four characters following the backslash are a hex value the token is
           // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
@@ -345,7 +345,7 @@
         break;
 
       case "UnicodeEscapeSequence": {
-          let sequence = str.substr(token.loc.end + 1, 4);
+          var sequence = str.substr(token.loc.end + 1, 4);
   
           // Only if the four characters following the backslash are a hex value the token is
           // recognized as Unicode escape sequence, otherwise it's interpreted as identity escape
