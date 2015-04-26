@@ -15,14 +15,14 @@
       self.field.addEventListener("mouseup", self.highlightGroup);
       self.field.addEventListener("keyup", function onRegExpFieldKeyUp(evt) {
         var navigationKeys = new Set([
-          KeyEvent.DOM_VK_LEFT,
-          KeyEvent.DOM_VK_RIGHT,
-          KeyEvent.DOM_VK_UP,
-          KeyEvent.DOM_VK_DOWN,
-          KeyEvent.DOM_VK_PAGE_UP,
-          KeyEvent.DOM_VK_PAGE_DOWN,
-          KeyEvent.DOM_VK_HOME,
-          KeyEvent.DOM_VK_END
+          37, // Left key
+          39, // Right key
+          38, // Up key
+          40, // Down key
+          33, // Page Up key
+          34, // Page Down key
+          36, // Home key
+          35 // End key
         ]);
 
         if (navigationKeys.has(evt.keyCode)) {

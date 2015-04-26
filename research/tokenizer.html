@@ -23,8 +23,10 @@
       var regExpField = document.getElementById("regexp");
 
       regExpField.addEventListener("keydown", function onRegExpFieldKeyDown(evt) {
-        if (evt.keyCode === KeyEvent.DOM_VK_RETURN)
+        // In case Return is pressed, tokenize the entered expression
+        if (evt.keyCode === 13) {
           tokenize();
+        }
       });
 
       var tokenizeButton = document.getElementById("tokenize");
