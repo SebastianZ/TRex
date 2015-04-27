@@ -47,12 +47,14 @@
     var selectionRange = window.getSelection();
 
     var parent = selectionRange.anchorNode;
-    while (parent !== document.documentElement && parent.id !== rootNode.id) {
-      parent = parent.parentElement;
-    }
+    if (parent) {
+      while (parent !== document.documentElement && parent.id !== rootNode.id) {
+        parent = parent.parentElement;
+      }
 
-    if (parent === document.documentElement) {
-      return 0;
+      if (parent === document.documentElement) {
+        return 0;
+      }
     }
 
     var offset = selectionRange.anchorOffset;
