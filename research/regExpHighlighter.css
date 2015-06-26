@@ -18,11 +18,11 @@ body {
   white-space: pre-wrap;
 }
 
-.bracket {
+.group.highlighted > .bracket {
   background-color: lightblue;
 }
 
-.group {
+.group.highlighted {
 	background-color: #ddeff4;
 }
 

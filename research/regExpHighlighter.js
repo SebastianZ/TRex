@@ -1,11 +1,48 @@
 (function () {
   "use strict";
 
-  let RegExpHighlighter = function() { };
-  let prototype = RegExpHighlighter.prototype;
+  var tokenizer = new RegExpTokenizer();
 
-  prototype.highlight = function(token) {
-    let brackets = new Map([
+  var RegExpHighlighter = function (fieldID) {
+    var self = this;
+    window.addEventListener("DOMContentLoaded", function () {
+      self.field.addEventListener("input", function onRegExpFieldInput(evt) {
+        if (!self.ignoredInputKeyCodes.has(evt.keyCode)) {
+          self.highlightGroup();
+        }
+      });
+
+      self.field.addEventListener("mouseup", self.highlightGroup);
+      self.field.addEventListener("keyup", function onRegExpFieldKeyUp(evt) {
+        var navigationKeys = new Set([
+          37, // Left key
+          39, // Right key
+          38, // Up key
+          40, // Down key
+          33, // Page Up key
+          34, // Page Down key
+          36, // Home key
+          35 // End key
+        ]);
+
+        if (navigationKeys.has(evt.keyCode)) {
+          self.highlightGroup();
+        }
+      });
+    });
+  };
+  RegExpHighlighter.prototype = new Highlighter("regExp");
+  RegExpHighlighter.prototype.constructor = RegExpHighlighter;
+  var prototype = RegExpHighlighter.prototype;
+
+  prototype.tokenize = function(regExp) {
+    this.tokenizedRegExp = tokenizer.tokenize(regExp);
+    console.log(this.tokenizedRegExp);
+    return this.tokenizedRegExp;
+  };
+
+  prototype.highlightRegExp = function(token) {
+    var brackets = new Map([
       ["CapturingGroup", {
         opening: "(",
         closing: ")"
@@ -175,10 +212,55 @@
       parent.appendChild(tokenSpan);
     }
 
-    let highlightedRegExp = new DocumentFragment();
+    var highlightedRegExp = new DocumentFragment();
     outputToken(highlightedRegExp, token);
 
     return highlightedRegExp;
+  };
+
+  prototype.highlightGroup = function() {
+    var highlightedGroup = document.getElementsByClassName("highlighted");
+    if (highlightedGroup.length > 0) {
+      highlightedGroup[0].classList.remove("highlighted");
+    }
+
+    var selection = window.getSelection();
+    var selectedElement = selection.anchorNode.parentElement;
+    var highlightedGroup = null;
+    if (selectedElement.classList.contains("bracket") && selection.anchorOffset === 1) {
+      highlightedGroup = selectedElement.parentElement;
+    } else if (selectedElement.previousElementSibling &&
+        selectedElement.previousElementSibling.classList.contains("group") &&
+        selection.anchorOffset === 0) {
+      highlightedGroup = selectedElement.previousElementSibling;
+    } else if (selection.anchorOffset === 0 && !selectedElement.classList.contains("Range")) {
+      var element = selectedElement;
+      while (!element.previousElementSibling &&
+          (element.parentElement.classList.contains("Alternation") ||
+              element.parentElement.classList.contains("Range"))) {
+        element = element.parentElement;
+      }
+
+      if (element.previousElementSibling && element.previousElementSibling.classList.contains("bracket")) {
+        highlightedGroup = element.parentElement;
+      }
+    }
+
+    if (highlightedGroup) {
+      highlightedGroup.classList.add("highlighted");
+    }
+  };
+
+  prototype.highlight = function() {
+    var regExp = this.tokenize(this.field.textContent);
+
+    var selectionOffset = this.getSelectionOffset(this.field);
+    this.field.textContent = "";
+    this.field.appendChild(this.highlightRegExp(regExp));
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    var range = this.getRangeByOffset(this.field, selectionOffset);
+    selection.addRange(range);
   };
 
   window.RegExpHighlighter = RegExpHighlighter;
