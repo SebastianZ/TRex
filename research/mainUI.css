@@ -1,8 +1,13 @@
-﻿body {
+﻿* {
+    outline: none;
+}
+
+body {
     padding: 0;
     margin: 0;
     background-color: #E6E6E6;
 }
+
 
 .main {
     color: white;
@@ -24,7 +29,7 @@
 }
 
 .middle-bar {
-    padding: 0px 10px;
+    padding: 15px 10px;
 }
 
 input.pattern {
@@ -53,12 +58,13 @@ textarea {
     cursor: pointer;
 }
 
-.top-menu > li div.bubble-box {
-    visibility: hidden;
-}
-.top-menu > li:hover div.bubble-box {
-    visibility: visible;
-}
+    .top-menu > li div.bubble-box {
+        visibility: hidden;
+    }
+
+    .top-menu > li:hover div.bubble-box {
+        visibility: visible;
+    }
 
 
 .bubble-box .arrow {
@@ -88,4 +94,24 @@ textarea {
     margin: 0px;
     list-style: outside none none;
     padding: 10px 20px 10px 0;
+}
+
+div.title {
+    padding: 10px;
+    background: #bcbcc4;
+    border: 1px solid gray;
+    border-bottom: none;
+    color: black;
+}
+
+#regExp {
+    display: inline;
+    border: none;
+    color: black;
+}
+
+#searchText {
+    border-top: none;
+    width: 100%;
+    color: black;
 }
