@@ -1,0 +1,17 @@
+{
+  "title": "Regular Expressions Tester",
+  "name": "trex",
+  "id": "regexptester@sebastianzartner.ath.cx",
+  "version": "4.0.0",
+  "description": "Tool for creating and testing regular expressions",
+  "main": "lib/main.js",
+  "author": "Sebastian Zartner",
+  "engines": {
+    "firefox": ">=39.0"
+  },
+  "dependencies": {
+    "firebug.sdk": "0.6.3"
+  },
+  "icon": "chrome://trex/skin/icon.png",
+  "license": "MIT"
+}

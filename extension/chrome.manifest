@@ -1,0 +1,4 @@
+content trex             chrome/content/
+skin trex classic/1.0    chrome/skin/classic/
+
+locale  trex en-US       chrome/locale/en-US/
