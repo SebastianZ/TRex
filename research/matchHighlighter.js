@@ -41,13 +41,14 @@
       }
     ];
 
-    var selectionOffset = this.getSelectionOffset(this.field);
+    var rangeTool = new RangeTool(this.field); 
+    var selectionOffset = rangeTool.getSelectionOffset(this.field);
     var searchText = this.field.textContent;
     this.field.textContent = "";
     this.field.appendChild(this.highlightMatches(searchText, matches));
     var selection = window.getSelection();
     selection.removeAllRanges();
-    var range = this.getRangeByOffset(this.field, selectionOffset);
+    var range = rangeTool.getRangeByOffset(this.field, selectionOffset);
     selection.addRange(range);
   }
 
