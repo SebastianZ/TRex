@@ -29,25 +29,15 @@
     return highlightedSearchText;
   };
 
-  prototype.highlight = function() {
-    var matches = [
-      {
-        start: 3,
-        end: 8
-      },
-      {
-        start: 14,
-        end: 15
-      }
-    ];
-
-    var selectionOffset = this.getSelectionOffset(this.field);
+  prototype.highlight = function(matches) {
+    var rangeTool = new RangeTool(this.field); 
+    var selectionOffset = rangeTool.getSelectionOffset(this.field);
     var searchText = this.field.textContent;
     this.field.textContent = "";
     this.field.appendChild(this.highlightMatches(searchText, matches));
     var selection = window.getSelection();
     selection.removeAllRanges();
-    var range = this.getRangeByOffset(this.field, selectionOffset);
+    var range = rangeTool.getRangeByOffset(this.field, selectionOffset);
     selection.addRange(range);
   }
 

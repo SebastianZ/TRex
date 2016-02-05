@@ -31,6 +31,7 @@
       });
     });
   };
+
   RegExpHighlighter.prototype = new Highlighter("regExp");
   RegExpHighlighter.prototype.constructor = RegExpHighlighter;
   var prototype = RegExpHighlighter.prototype;
@@ -254,12 +255,13 @@
   prototype.highlight = function() {
     var regExp = this.tokenize(this.field.textContent);
 
-    var selectionOffset = this.getSelectionOffset(this.field);
+    var rangeTool = new RangeTool(this.field); 
+    var selectionOffset = rangeTool.getSelectionOffset(this.field);
     this.field.textContent = "";
     this.field.appendChild(this.highlightRegExp(regExp));
     var selection = window.getSelection();
     selection.removeAllRanges();
-    var range = this.getRangeByOffset(this.field, selectionOffset);
+    var range = rangeTool.getRangeByOffset(this.field, selectionOffset);
     selection.addRange(range);
   };
 
