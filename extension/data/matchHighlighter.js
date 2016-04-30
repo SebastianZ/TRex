@@ -7,7 +7,7 @@
   MatchHighlighter.prototype.constructor = MatchHighlighter;
   var prototype = MatchHighlighter.prototype;
 
-  prototype.highlightMatches = function(searchText, matches) {
+  prototype.highlightMatches = function(searchText, matches = []) {
     var highlightedSearchText = new DocumentFragment();
     var previousMatchEnd = 0;
     matches.forEach(function highlightMatches(match) {
@@ -29,12 +29,12 @@
     return highlightedSearchText;
   };
 
-  prototype.highlight = function(matches) {
+  prototype.highlight = function() {
     var rangeTool = new RangeTool(this.field); 
     var selectionOffset = rangeTool.getSelectionOffset(this.field);
     var searchText = this.field.textContent;
     this.field.textContent = "";
-    this.field.appendChild(this.highlightMatches(searchText, matches));
+    this.field.appendChild(this.highlightMatches(searchText, this.matches));
     var selection = window.getSelection();
     selection.removeAllRanges();
     var range = rangeTool.getRangeByOffset(this.field, selectionOffset);
