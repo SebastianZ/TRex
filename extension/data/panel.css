@@ -1,117 +1,31 @@
-* {
-    outline: none;
-}
+/* See license.txt for terms of usage */
 
 body {
-    padding: 0;
-    margin: 0;
-    background-color: #E6E6E6;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-
-.main {
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-}
-
-.top-menu {
-    padding: 0px;
-    margin: 0px;
-    list-style: outside none none;
-}
-
-.top-bar {
-    background-color: black;
-    padding: 10px 5px;
-    border-bottom: 2px solid #B0B0B0;
-    margin-top: 10px;
-}
-
-.middle-bar {
-    padding: 15px 10px;
-}
-
-input.pattern {
-    border: medium none;
-    margin: 0px;
-    padding: 0px;
-    background-color: transparent;
-    color: green;
-    font-size: 20px;
-}
-
-span.slash {
-    color: #66FF7D;
-}
-
-textarea {
-    width: 100%;
-}
-
-.bubble-box {
-    position: relative;
-    color: black;
-}
-
-.top-menu > li {
-    cursor: pointer;
-}
-
-    .top-menu > li div.bubble-box {
-        visibility: hidden;
-    }
-
-    .top-menu > li:hover div.bubble-box {
-        visibility: visible;
-    }
-
-
-.bubble-box .arrow {
-    border-bottom: 10px solid white;
-    width: 0px;
-    z-index: 10;
-    border-left: 10px dashed transparent;
-    border-right: 10px dashed transparent;
-    height: 0px;
-    position: relative;
-    top: 2px;
-    left: 20px;
-}
-
-.bubble-box .main-box {
-    padding: 0px 10px 10px;
-    background-color: white;
-    border: 1px solid rgb(204, 204, 204);
-    display: block;
-    z-index: 9;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-    position: absolute;
-}
-
-.bubble-box .menu {
-    color: black;
-    margin: 0px;
-    list-style: outside none none;
-    padding: 10px 20px 10px 0;
-}
-
-div.title {
-    padding: 10px;
-    background: #bcbcc4;
-    border: 1px solid gray;
-    border-bottom: none;
-    color: black;
+#regExpContainer {
+  font-family: Consolas, Courier New, Monaco, monospace;
+  font-size: 20px;
 }
 
 #regExp {
-    display: inline;
-    border: none;
-    color: black;
+  display: inline-block;
+  width: inherit;
+  height: 20px;
+  border: none;
+  padding: 0;
+  overflow-y: inherit;
+  font-family: Consolas, Courier New, Monaco, monospace;
 }
 
-#searchText {
-    border-top: none;
-    width: 100%;
-    color: black;
+.slash,
+#flags {
+  color: #64648C;
 }
+
+#searchString {
+  padding: 0;
+  font-family: Consolas, Courier New, Monaco, monospace;
+}
+

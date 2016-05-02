@@ -1,12 +1,9 @@
-(function () {
-  "use strict";
+/* See license.txt for terms of usage */
 
-  var RangeTool = function() {
-  };
+"use strict";
 
-  var prototype = RangeTool.prototype;
-
-  prototype.getSelectionOffset = function(rootNode) {
+class RangeTool {
+  getSelectionOffset(rootNode) {
     var selectionRange = window.getSelection();
 
     var parent = selectionRange.anchorNode;
@@ -33,9 +30,9 @@
     }
 
     return offset;
-  };
+  }
 
-  prototype.getRangeByOffset = function(rootNode, offset) {
+  getRangeByOffset(rootNode, offset) {
     var node = rootNode;
     var anchorOffset = offset;
     while (node) {
@@ -57,9 +54,5 @@
     range.setEnd(node, anchorOffset);
 
     return range;
-  };
-
-  var prototype = RangeTool.prototype;
-
-  window.RangeTool = RangeTool;
-})();
+  }
+}

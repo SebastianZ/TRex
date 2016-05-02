@@ -1,13 +1,9 @@
-(function () {
-  "use strict";
+/* See license.txt for terms of usage */
 
-  var MatchHighlighter = function () {
-  };
-  MatchHighlighter.prototype = new Highlighter("searchText");
-  MatchHighlighter.prototype.constructor = MatchHighlighter;
-  var prototype = MatchHighlighter.prototype;
+"use strict";
 
-  prototype.highlightMatches = function(searchText, matches = []) {
+class SearchTextFormatter {
+  highlightMatches(searchText, matches = []) {
     var highlightedSearchText = new DocumentFragment();
     var previousMatchEnd = 0;
     matches.forEach(function highlightMatches(match) {
@@ -27,9 +23,9 @@
       highlightedSearchText.appendChild(textNode);
     }
     return highlightedSearchText;
-  };
+  }
 
-  prototype.highlight = function() {
+  highlight() {
     var rangeTool = new RangeTool(this.field); 
     var selectionOffset = rangeTool.getSelectionOffset(this.field);
     var searchText = this.field.textContent;
@@ -40,6 +36,4 @@
     var range = rangeTool.getRangeByOffset(this.field, selectionOffset);
     selection.addRange(range);
   }
-
-  window.MatchHighlighter = MatchHighlighter;
-})();
+}

@@ -1,89 +1,52 @@
 <!DOCTYPE html>
-<html>
 <head>
-    <meta charset="UTF-8" />
-    <title>TRex</title>    
-    <link type="text/css" rel="stylesheet" href="regExpHighlighter.css" />
-    <link type="text/css" rel="stylesheet" href="matchHighlighter.css" />
-    <link type="text/css" rel="stylesheet" href="panel.css" />
+  <meta charset="utf-8"/>
+  <link href="regExp.css" rel="stylesheet"/>
+  <link href="searchText.css" rel="stylesheet"/>
+  <link href="panel.css" rel="stylesheet"/>
+  <!-- <script src="tokenizer.js"></script>
+  <script src="rangeTool.js"></script>
+  <script src="matchHighlighter.js"></script>
+  <script>
+  var regExpHighlighter = new RegExpHighlighter();
+  var matchHighlighter = new MatchHighlighter();
 
-    <script type="application/javascript" src="tokenizer.js"></script>
-    <script type="application/javascript" src="highlighter.js"></script>
-    <script type="application/javascript" src="regExpHighlighter.js"></script>
-    <script type="application/javascript" src="matchHighlighter.js"></script>
-    
+  var matches = [
+    {
+      start: 3,
+      end: 8
+    },
+    {
+      start: 14,
+      end: 15
+    }
+  ];
+
+  matchHighlighter.matches = matches;
+  </script> -->
+  <script src="regExpTokenizer.js"></script>
+  <script src="rangeTool.js"></script>
+  <script src="regExpFormatter.js"></script>
+  <script src="searchTextFormatter.js"></script>
+  <script src="controller.js"></script>
+  <script>
+  window.addEventListener("load", function onLoad() {
+    window.removeEventListener("load", onLoad);
+    let controller = new Controller(document.getElementById("regExp"),
+        document.getElementById("searchText"), new RegExpTokenizer(),
+        new RangeTool(), new RegExpFormatter(), new SearchTextFormatter());
+  });
+  </script>
 </head>
-<body>
-    <div class="main">
-        <div class="top-bar">
-            <ul class="top-menu">
-                <li>
-                <label>Flags</label>
-                    <div class="bubble-box">
-                        <div class="arrow"></div>
-                        <div class="main-box">
-                            <ul class="menu">
-                                <li>
-                                    <input type="checkbox" />
-                                    <label>ignore case</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" />
-                                    <label>multiline</label>
-                                </li>
-                                <li>
-                                    <input type="checkbox" />
-                                    <label>global</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="middle-bar">
-            <label>Expression:</label>
-            <span class="slash">/</span><div id="regExp">a(b|c)</div><span class="slash">/</span>
-        </div>
-        <div class="title">
-            Text
-        </div>
-        <div class="bottom-bar">
-            <div id="searchText">abcdefghijklmnopqrstuvwxyz</div>
-        </div>
+<body id="body">
+  <section id="regExpSection">
+    <h2>Regular expression</h2>
+    <div id="regExpContainer" spellcheck="false">
+      <span class="slash">/</span><span id="regExp">a(b|c)</span><span class="slash">/</span><span id="flags">g</span>
     </div>
-    <script type="text/javascript">
-        var ignoredInputKeyCodes = new Set([
-            37, // Left key
-            39, // Right key
-            38, // Up key
-            40, // Down key
-            17, // Ctrl key
-            18, // Alt key
-            225, // AltGr key
-            224, // Meta key
-            16, // Shift key
-            20, // Caps Lock key
-            9, // Tab key
-            13, // Return key
-            93, // Context Menu key
-            27, // Escape key
-            33, // Page up key
-            34, // Page down key
-            36, // Home key
-            35, // End key
-            144, // Num Lock key
-            19, // Pause key
-            44 // Print Screen key
-        ]);
-        window.regExpField = document.getElementById("regExp");
-        var regExpHighlighter = new RegExpHighlighter(),
-            matchHighlighter = new MatchHighlighter();
-        window.regExpField.addEventListener("input", function onFieldInput(evt) {
-            if (!ignoredInputKeyCodes.has(evt.keyCode)) {
-                matchHighlighter.highlight();
-            }
-        });
-    </script>
+  </section>
+  <section id="searchStringSection">
+    <h2>Search text</h2>
+    <div id="searchText" spellcheck="false">test abc 123 test abc 123</div>
+  </section>
 </body>
-</html>
