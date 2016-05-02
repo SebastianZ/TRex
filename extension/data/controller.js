@@ -21,7 +21,7 @@ const IGNORED_KEY_CODES = new Set([
 ]);
 
 class Controller {
-  constructor(regExpField, searchTextField, tokenizer, rangeTool, regExpFormatter, searchTextFormatter) {
+  constructor(regExpField, searchTextField, regExpFormatter, searchTextFormatter) {
     let self = this;
     function handleInput() {
       self.updateDisplay();
@@ -29,20 +29,26 @@ class Controller {
 
     function handleMouseEvent(evt) {
       self.regExpFormatter.highlight();
-      self.searchTextFormatter.highlight();
+      let searchText = self.searchTextField.textContent;
+      let matches = RegExpTester.test(self.regExpField.textContent, "", searchText);
+      console.log(searchText, matches);
+      self.searchTextFormatter.highlightMatches(matches);
     }
 
     function handleKeyboardEvent(evt) {
       if (!IGNORED_KEY_CODES.has(evt.keyCode)) {
         self.regExpFormatter.highlight();
-        self.searchTextFormatter.highlight();
+        let searchText = self.searchTextField.textContent;
+        let matches = RegExpTester.test(self.regExpField.textContent, "", searchText);
+        console.log(searchText, matches);
+        self.searchTextFormatter.highlightMatches(matches);
       }
     }
 
+    this.tokenizer = new RegExpTokenizer();
+    this.rangeTool = new RangeTool();
     this.regExpField = regExpField;
     this.searchTextField = searchTextField;
-    this.tokenizer = tokenizer;
-    this.rangeTool = rangeTool;
     this.regExpFormatter = regExpFormatter;
     this.searchTextFormatter = searchTextFormatter;
 
@@ -71,14 +77,6 @@ class Controller {
     let range = this.rangeTool.getRangeByOffset(this.regExpField, selectionOffset);
     selection.addRange(range);
 
-    let searchText = this.searchTextField.textContent;
-    let matches = [
-      {
-        start: 2,
-        end: 6
-      }
-    ];
-    this.searchTextField.textContent = "";
-    this.searchTextField.appendChild(this.searchTextFormatter.highlightMatches(searchText, matches));
+    this.searchTextField.textContent = this.searchTextField.textContent;
   }
 }
