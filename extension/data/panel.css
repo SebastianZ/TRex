@@ -1,7 +1,20 @@
 /* See license.txt for terms of usage */
 
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin: 10px 0;
 }
 
 #regExpContainer {
@@ -22,6 +35,12 @@ body {
 .slash,
 #flags {
   color: #64648C;
+}
+
+#searchStringSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 #searchString {
