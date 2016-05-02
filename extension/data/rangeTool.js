@@ -4,9 +4,9 @@
 
 class RangeTool {
   getSelectionOffset(rootNode) {
-    var selectionRange = window.getSelection();
+    let selectionRange = window.getSelection();
 
-    var parent = selectionRange.anchorNode;
+    let parent = selectionRange.anchorNode;
     if (parent) {
       while (parent !== document.documentElement && parent.id !== rootNode.id) {
         parent = parent.parentElement;
@@ -17,9 +17,9 @@ class RangeTool {
       }
     }
 
-    var offset = selectionRange.anchorOffset;
+    let offset = selectionRange.anchorOffset;
 
-    var node = selectionRange.anchorNode;
+    let node = selectionRange.anchorNode;
     while(node && node.id !== rootNode.id) {
       if (node.previousSibling) {
         node = node.previousSibling;
@@ -33,15 +33,17 @@ class RangeTool {
   }
 
   getRangeByOffset(rootNode, offset) {
-    var node = rootNode;
-    var anchorOffset = offset;
+    let node = rootNode;
+    let anchorOffset = offset;
     while (node) {
-      var contentLength = node.textContent.length;
+      let contentLength = node.textContent.length;
       if (contentLength >= anchorOffset) {
         if (node.nodeType === Node.TEXT_NODE) {
           break;
-        } else {
+        } else if (node.firstChild) {
           node = node.firstChild;
+        } else {
+          break;
         }
       } else {
         anchorOffset -= contentLength;
@@ -49,7 +51,7 @@ class RangeTool {
       }
     }
 
-    var range = document.createRange();
+    let range = document.createRange();
     range.setStart(node, anchorOffset);
     range.setEnd(node, anchorOffset);
 
