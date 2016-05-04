@@ -13,7 +13,7 @@
   <script>
   window.addEventListener("load", function onLoad() {
     window.removeEventListener("load", onLoad);
-    let controller = new Controller(document.getElementById("regExp"),
+    let controller = new Controller(document.getElementById("regExp"), document.getElementById("flags"),
         document.getElementById("searchText"), new RegExpFormatter(), new SearchTextFormatter(document.getElementById("searchText")));
   });
   </script>

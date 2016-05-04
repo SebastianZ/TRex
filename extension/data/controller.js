@@ -21,7 +21,7 @@ const IGNORED_KEY_CODES = new Set([
 ]);
 
 class Controller {
-  constructor(regExpField, searchTextField, regExpFormatter, searchTextFormatter) {
+  constructor(regExpField, flagsField, searchTextField, regExpFormatter, searchTextFormatter) {
     let self = this;
     function handleInput() {
       self.updateDisplay();
@@ -30,8 +30,8 @@ class Controller {
     function handleMouseEvent(evt) {
       self.regExpFormatter.highlight();
       let searchText = self.searchTextField.textContent;
-      let matches = RegExpTester.test(self.regExpField.textContent, "", searchText);
-      console.log(searchText, matches);
+      let matches = RegExpTester.test(self.regExpField.textContent, self.flagsField.textContent,
+          searchText);
       self.searchTextFormatter.highlightMatches(matches);
     }
 
@@ -39,8 +39,8 @@ class Controller {
       if (!IGNORED_KEY_CODES.has(evt.keyCode)) {
         self.regExpFormatter.highlight();
         let searchText = self.searchTextField.textContent;
-        let matches = RegExpTester.test(self.regExpField.textContent, "", searchText);
-        console.log(searchText, matches);
+        let matches = RegExpTester.test(self.regExpField.textContent, self.flagsField.textContent,
+            searchText);
         self.searchTextFormatter.highlightMatches(matches);
       }
     }
@@ -48,11 +48,13 @@ class Controller {
     this.tokenizer = new RegExpTokenizer();
     this.rangeTool = new RangeTool();
     this.regExpField = regExpField;
+    this.flagsField = flagsField;
     this.searchTextField = searchTextField;
     this.regExpFormatter = regExpFormatter;
     this.searchTextFormatter = searchTextFormatter;
 
     this.regExpField.contentEditable = true;
+    this.flagsField.contentEditable = true;
     this.searchTextField.contentEditable = true;
 
     this.updateDisplay();
