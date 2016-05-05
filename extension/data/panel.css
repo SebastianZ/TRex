@@ -22,16 +22,6 @@ h2 {
   font-size: 20px;
 }
 
-#regExp {
-  display: inline-block;
-  width: inherit;
-  height: 20px;
-  border: none;
-  padding: 0;
-  overflow-y: inherit;
-  font-family: Consolas, Courier New, Monaco, monospace;
-}
-
 .slash,
 #flags {
   color: #64648C;
