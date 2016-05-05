@@ -28,20 +28,12 @@ class Controller {
     }
 
     function handleMouseEvent(evt) {
-      self.regExpFormatter.highlight();
-      let searchText = self.searchTextField.textContent;
-      let matches = RegExpTester.test(self.regExpField.textContent, self.flagsField.textContent,
-          searchText);
-      self.searchTextFormatter.highlightMatches(matches);
+      self.updateHighlighting();
     }
 
     function handleKeyboardEvent(evt) {
       if (!IGNORED_KEY_CODES.has(evt.keyCode)) {
-        self.regExpFormatter.highlight();
-        let searchText = self.searchTextField.textContent;
-        let matches = RegExpTester.test(self.regExpField.textContent, self.flagsField.textContent,
-            searchText);
-        self.searchTextFormatter.highlightMatches(matches);
+        self.updateHighlighting();
       }
     }
 
@@ -80,5 +72,13 @@ class Controller {
     selection.addRange(range);
 
     this.searchTextField.textContent = this.searchTextField.textContent;
+  }
+
+  updateHighlighting() {
+    this.regExpFormatter.highlight();
+    let searchText = this.searchTextField.textContent;
+    let matches = RegExpTester.test(this.regExpField.textContent, this.flagsField.textContent,
+        searchText);
+    this.searchTextFormatter.highlightMatches(matches);
   }
 }
