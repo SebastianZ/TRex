@@ -42,8 +42,8 @@ class Controller {
     this.regExpField = regExpField;
     this.flagsField = flagsField;
     this.searchTextField = searchTextField;
-    this.regExpFormatter = regExpFormatter;
-    this.searchTextFormatter = searchTextFormatter;
+    this.regExpFormatter = new RegExpFormatter();
+    this.searchTextFormatter = new SearchTextFormatter(searchTextField);
 
     this.regExpField.contentEditable = true;
     this.flagsField.contentEditable = true;
