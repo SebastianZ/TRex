@@ -25,7 +25,7 @@ class SearchTextFormatter {
       previousMatchEnd = match.end;
     });
 
-    if (matches.length > 0 && matches[matches.length - 1].end < searchText.length) {
+    if (matches.length === 0 || matches[matches.length - 1].end < searchText.length) {
       let textNode = document.createTextNode(searchText.substring(previousMatchEnd, searchText.length));
       highlightedSearchText.appendChild(textNode);
     }
