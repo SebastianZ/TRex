@@ -9,14 +9,16 @@ class RegExpTester {
 
     let matches = [];
 
-    let match = null;
-    while(match = regExp.exec(searchText)) {
-      matches.push({
-        start: regExp.lastIndex - match[0].length,
-        end: regExp.lastIndex
-      });
-      if(!flags.includes("g"))
-        break;
+    if (regExpString !== "") {
+      let match = null;
+      while(match = regExp.exec(searchText)) {
+        matches.push({
+          start: regExp.lastIndex - match[0].length,
+          end: regExp.lastIndex
+        });
+        if(!flags.includes("g"))
+          break;
+      }
     }
     return matches;
   }
