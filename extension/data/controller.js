@@ -50,6 +50,8 @@ class Controller {
     this.searchTextField.contentEditable = true;
 
     this.updateDisplay();
+    this.updateHighlighting();
+
     this.regExpField.addEventListener("input", handleInput);
 
     this.regExpField.addEventListener("mousedown", handleMouseEvent);
